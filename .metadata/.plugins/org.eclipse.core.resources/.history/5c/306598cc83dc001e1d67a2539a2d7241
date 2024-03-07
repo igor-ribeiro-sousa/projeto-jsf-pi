@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<title>Usuário - Pesquisar</title>
+	<style>
+html, body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+body {
+	background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28,
+		#141d2e);
+}
+
+.card-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.card {
+	width: 80rem; /* Defina a largura desejada */
+	margin-bottom: 2em;
+}
+</style>
+</h:head>
+
+<h:body>
+	<div class="card-container">
+		<p:card styleClass="card">
+			<f:facet name="title">
+				Usuário - Pesquisar
+			</f:facet>
+			<h:form id="formulario">
+
+				<p:messages id="messages" showDetail="true" closable="true">
+					<p:autoUpdate />
+				</p:messages>
+				
+				<span class="ui-input-icon-left"> <i class="pi pi-search" />
+					<p:inputText placeholder="Pesquisar usuário por nome"
+						style="width: 77rem;" value="#{usuarioBean.nomeUsuarioPesquisa}" /> 
+				</span>
+
+				<p:dataTable value="#{usuarioBean.usuarios}" rows="5" var="item"
+					emptyMessage="Nenhum usuário" style="text-align: center;"
+					paginator="false"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} resultados"
+					rowsPerPageTemplate="5,10">
+
+					<p:column headerText="Id" style="text-align: center; cursor: pointer;">
+						<h:outputText value="#{item.id}" icon="pi pi-search"/>
+					</p:column>
+
+					<p:column headerText="Nome" style="text-align: center; cursor: pointer;">
+						<h:outputText value="#{item.nome}" title="#{item.nome}"/>
+					</p:column>
+					
+					<p:column headerText="E-mail" style="text-align: center; cursor: pointer;">
+						<h:outputText value="#{item.email}" title="#{item.email}"/>
+					</p:column>
+
+
+					<p:column headerText="Data Nascimento" style="text-align: center; cursor: pointer;">
+						<h:outputText value="#{item.dataNascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Data Inclusao" style="text-align: center; cursor: pointer;">
+						<h:outputText value="#{item.dataInclusao}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Situação" style="text-align: center; cursor: pointer;">
+						<h:outputText value="#{item.flagAtivo eq 'S' ? 'ATIVO' : 'INATIVO'}" />
+					</p:column>
+					
+					<p:column headerText="Ações" style="text-align: center; cursor: pointer;">
+
+						<p:commandButton action="#{usuarioBean.editar(item)}"
+							icon="pi pi-pencil" title="Editar"
+							styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only edit-button rounded-button ui-button-success"
+							update="contentPanel" type="submit">
+						</p:commandButton>
+
+						<span style="margin-left: 5px;"></span>
+
+						<p:commandButton action="#{usuarioBean.deletar(item.id)}"
+							icon="pi pi-trash" title="Deletar"
+							styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-button-warning rounded-button"
+							update="formulario" type="submit">
+							<f:param name="id" value="#{item.id}" />
+						</p:commandButton>
+
+					</p:column>
+
+				</p:dataTable>
+
+				<div class="ui-g-12">
+					<div style="display: flex; justify-content: flex-end; gap: 10px;">
+						<p:commandButton value="Pesquisar" icon="pi pi-search"
+							action="#{usuarioBean.pesquisarPorNome}"
+							styleClass="ui-button-success" update="contentPanel"/>
+
+						<p:commandButton value="Novo"
+							actionListener="#{navegacaoBean.setCurrentPage('usuario-inserir.xhtml')}"
+							styleClass="ui-button-success" update="contentPanel" />
+					</div>
+				</div>
+
+
+
+
+			</h:form>
+		</p:card>
+	</div>
+</h:body>
+</html>

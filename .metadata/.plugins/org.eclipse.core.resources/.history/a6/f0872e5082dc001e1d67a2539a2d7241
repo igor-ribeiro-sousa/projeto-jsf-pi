@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="projeto-jsf-pi">
+        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <property name="context-root" value="projeto-jsf-pi"/>
+        <property name="java-output-path" value="/projeto-jsf-pi/build/classes"/>
+    </wb-module>
+</project-modules>

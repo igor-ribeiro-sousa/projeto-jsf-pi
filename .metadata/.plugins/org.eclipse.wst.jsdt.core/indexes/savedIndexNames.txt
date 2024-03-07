@@ -1,0 +1,2 @@
+INDEX VERSION 1.4+C:\Dev\Projetos\Trabalho DAC20241\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3681670557.index

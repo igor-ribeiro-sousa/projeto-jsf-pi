@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<title>Usuario logado</title>
+	<style>
+html, body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+body {
+	background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28,
+		#141d2e);
+}
+
+.card-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.card {
+	width: 80rem; /* Defina a largura desejada */
+	margin-bottom: 2em;
+}
+</style>
+</h:head>
+
+<h:body>
+	<div class="card-container">
+		<p:card styleClass="card">
+			<f:facet name="title">
+				PROJETO INTEGRADOR - ENGENHARIA DE SOFTWARE
+			</f:facet>
+
+			<p:messages id="messages" showDetail="true" closable="true">
+				<p:autoUpdate />
+			</p:messages>
+
+
+			<p>
+				Sobre
+				<ul>
+					<li>Olá! Seja bem vindo ao sistema de agendamentos
+						desenvolvido por nossa equipe.<br /> Esse é um sistema para
+						agendamemntos desenvolvido utilizando Java, JSF e Primefaces. O
+						projeto tem como objetivo principal abordar os conceitos de
+						aplicações SPAs, Autenticação e Autorização com Tokens JWT e muito
+						mais. O código fonte do projeto pode ser acessado clicando no link
+						Github no menu lateral.
+					</li>
+				</ul>
+
+				Integrantes:
+				<ul>
+					<li>Igor Ribeiro</li>
+					<li>Lucas Silva</li>
+					<li>Petrus</li>
+				</ul>
+			</p>
+
+			<div class="ui-g-12" style="text-align: right;">
+				<p:commandButton value="Fazer download"
+					actionListener="#{homeBean.download}" icon="pi pi-print"
+					styleClass="ui-button-success" update="contentPanel" />
+			</div>
+
+		</p:card>
+	</div>
+</h:body>
+
+</html>

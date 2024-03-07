@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<title>Usuario logado</title>
+	<style>
+html, body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+
+body {
+	background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28,
+		#141d2e);
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	background-color: #FFFF;
+	width: 100%;
+	flex: 0 0 auto;
+	z-index: 2;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 20px;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+.outra-coisa {
+	display: flex;
+	align-items: center;
+	padding-right: 20px;
+}
+
+.navigation-container {
+	background-color: #fff;
+	color: #fff;
+	flex: 0 0 auto;
+	z-index: 1;
+	overflow-y: auto;
+	position: fixed;
+	top: 47px;
+	left: -250px; /* Fora da tela */
+	width: 200px; /* Largura do menu */
+	height: 100%;
+	transition: left 0.3s ease;
+	/* Transição suave ao mover para a esquerda */
+}
+
+.navigation-container.active {
+	left: 0; /* Move para a esquerda quando ativo */
+}
+
+.p-megamenu-vertical {
+	width: 100%;
+}
+
+.p-menu-vertical {
+	width: 100%;
+}
+
+.p-mega-octopus-panel {
+	width: 100%;
+}
+
+.content {
+	flex: 1 1 auto;
+	padding: 20px;
+	overflow-y: auto;
+	color: #fff;
+	margin-top: 60px; /* Afasta o conteúdo do cabeçalho */
+	padding-left: 20px;
+	/* Afasta o conteúdo do menu quando este está ativo */
+	transition: padding-left 0.3s ease;
+	/* Transição suave ao ajustar o padding-left */
+}
+
+.content.active {
+	padding-left: 270px; /* Afasta o conteúdo quando o menu está ativo */
+}
+</style>
+</h:head>
+
+<h:body>
+	<div class="header">
+		<div class="header-botao-menu" id="toggleNav">
+			<!-- <b style="cursor: pointer;">&nbsp;Trabalho PI&nbsp;</b> -->
+			<i class="pi pi-bars" style="font-size: 24px; cursor: pointer;"></i>
+		</div>
+		<div class="outra-coisa">
+			<p>Igor Ribeiro</p>
+		</div>
+	</div>
+
+
+	<div class="navigation-container">
+		<h:form>
+			<p:megaMenu orientation="vertical" autoDisplay="false"
+				styleClass="p-megamenu-vertical">
+				<p:menuitem value="Home"
+					actionListener="#{navegacaoBean.setCurrentPage('home.xhtml')}"
+					icon="pi pi-home" update="contentPanel" />
+
+				<p:menuitem value="Usuario"
+					actionListener="#{navegacaoBean.setCurrentPage('usuario-pesquisar.xhtml')}"
+					icon="pi pi-id-card" update="contentPanel" />
+
+				<p:menuitem value="Logout"
+					actionListener="#{navegacaoBean.setCurrentPage('home.xhtml')}"
+					icon="pi pi-power-off" update="contentPanel" />
+			</p:megaMenu>
+		</h:form>
+	</div>
+
+	<div class="content">
+		<h:panelGroup id="contentPanel">
+			<ui:include src="#{navegacaoBean.currentPage}" />
+		</h:panelGroup>
+	</div>
+
+
+	<script>
+		document.getElementById('toggleNav').addEventListener(
+				'click',
+				function() {
+					document.querySelector('.navigation-container').classList.toggle('active');
+					document.querySelector('.content').classList.toggle('active');
+				});
+	</script>
+</h:body>
+
+</html>

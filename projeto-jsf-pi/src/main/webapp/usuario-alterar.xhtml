@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<title>Usuário - Alterar</title>
+	<style>
+html, body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+body {
+	background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28,
+		#141d2e);
+}
+
+.card-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.card {
+	width: 80rem; /* Defina a largura desejada */
+	margin-bottom: 2em;
+}
+</style>
+</h:head>
+
+<h:body>
+	<div class="card-container">
+		<p:card styleClass="card">
+			<f:facet name="title">
+				Usuário - Alterar
+			</f:facet>
+
+			<h:form id="formulario">
+
+				<p:messages id="messages" showDetail="true" closable="true">
+					<p:autoUpdate />
+				</p:messages>
+
+				<div class="ui-g">
+
+					<div class="ui-g-12">
+						<span class="ui-input-icon-left"> <i class="pi pi-user" />
+							<p:inputText style="width: 77rem;"
+								id="nome"
+								value="#{usuarioBean.usuario.nome}"
+								placeholder="Digite o nome do usuário" />
+						</span>
+					</div>
+
+					<!-- <div class="ui-g-6">
+						<span class="ui-input-icon-left"> <i class="pi pi-lock" />
+							<p:password style="width: 38rem;" id="senhaInput"
+								value="#{usuarioBean.usuario.senha}"
+								placeholder="Digite sua senha" toggleMask="true" /> <i
+							class="pi" id="mostrarSenhaIcon" style="cursor: pointer;"
+							onclick="senhaVisivel('senhaInput', 'mostrarSenhaIcon')" />
+						</span>
+					</div>
+
+					<div class="ui-g-6">
+						<span class="ui-input-icon-left"> <i class="pi pi-lock" />
+							<p:password style="width: 38rem;" id="senhaConfirmacaoInput"
+								value="#{usuarioBean.senhaConfirmacao}"
+								placeholder="Confirmar sua senha" toggleMask="true" /> <i
+							class="pi" id="mostrarSenhaConfirmacaoIcon"
+							style="cursor: pointer;"
+							onclick="senhaVisivel('senhaConfirmacaoInput', 'mostrarSenhaConfirmacaoIcon')" />
+						</span>
+					</div> -->
+
+					<div class="ui-g-12">
+						<div class="input-container">
+							<span class="ui-input-icon-left"> <i
+								class="pi pi-envelope" /> <p:inputText style="width: 77rem;"
+									id="email"
+									value="#{usuarioBean.usuario.email}"
+									placeholder="Digite o endereço de e-mail" />
+							</span>
+						</div>
+					</div>
+
+					<div class="ui-g-4">
+						<div class="ui-input-icon-left">
+							<p:calendar id="dataNasc"
+								value="#{usuarioBean.usuario.dataNascimento}"
+								placeholder="Data de nascimento" showOn="button" />
+						</div>
+					</div>
+					<div class="ui-g-4">
+						<p:selectOneRadio id="line"
+							value="#{usuarioBean.usuario.flagAtivo}" layout="lineDirection">
+							<f:selectItem itemLabel="Ativo" itemValue="S" />
+							<f:selectItem itemLabel="Inativo" itemValue="N" />
+						</p:selectOneRadio>
+					</div>
+
+				</div>
+
+				<div class="ui-g-12">
+					<div style="display: flex; justify-content: flex-end; gap: 10px;">
+						<p:commandButton value="Voltar"
+							actionListener="#{navegacaoBean.setCurrentPage('usuario-pesquisar.xhtml')}"
+							styleClass="ui-button-secondary" update="contentPanel" />
+						<p:commandButton value="Alterar" icon="pi pi-check"
+							action="#{usuarioBean.alterar}" update="contentPanel"
+							styleClass="ui-button-success" />
+					</div>
+				</div>
+
+
+			</h:form>
+		</p:card>
+	</div>
+	<script>
+		function senhaVisivel(inputId, iconId) {
+			var input = document.getElementById(inputId);
+			var icon = document.getElementById(iconId);
+
+			if (input.type === 'password') {
+				input.type = 'text';
+				icon.classList.remove('pi-lock');
+				icon.classList.add('pi-unlock');
+			} else {
+				input.type = 'password';
+				icon.classList.remove('pi-unlock');
+				icon.classList.add('pi-lock');
+			}
+		}
+		
+		window.onload = function() {
+			var emailOriginal = document.getElementById('emailOriginal').value;
+		};
+	</script>
+</h:body>
+</html>
