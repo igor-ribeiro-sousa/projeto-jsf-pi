@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Projeto JSF-PI</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        body {
+            background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28, #141d2e);
+        }
+        
+        .card-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .card-header {
+            text-align: center;
+        }
+        
+        .card {
+            width: 40rem;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        #formulario {
+            text-align: left;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="card-container" style="text-align: center;">
+        <p:card styleClass="card">
+            
+            <div class="card-header">
+                <img src="../assets/logo.png" alt="Logo" style="max-width: 35%; height: auto;"/>
+            </div><br/>
+
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="form-container">
+                <h:form id="formulario" style="width: 90%;">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="input-container">
+                                <span class="ui-input-icon-right"> 
+                                    <i class="pi pi-envelope" /> 
+                                    <p:inputText style="width: 33rem;" id="email" value="#{loginBean.login.login}" placeholder="Digite seu e-mail" />
+                                </span>
+                            </div>
+                        </div>
+
+						<div class="ui-g-12">
+							<div class="input-container">
+								<span class="ui-input-icon-left"> <i class="pi pi-lock" />
+									<p:password
+										style="width: 33rem;"
+										id="senhaInput" value="#{loginBean.login.senha}"
+										placeholder="Digite sua senha" toggleMask="true" /> <i
+									class="pi" id="mostrarSenhaIcon" style="cursor: pointer;"
+									onclick="senhaVisivel('senhaInput', 'mostrarSenhaIcon')" />
+								</span> 
+							</div>
+							
+						</div>
+						<a href="#" style="color: #007bff; 
+										   text-decoration: none; 
+								  		   font-weight: bold;
+										   margin-left:0.5rem; 
+										   font-size:15px;">Esqueci a senha</a>
+						
+
+
+					</div><br/>
+
+                    <div class="ui-g-12">
+                        <p:commandButton style="width: 33rem;" value="Entrar" icon="pi pi-check" action="#{loginBean.logar}" update="formulario" styleClass="ui-button-success" />
+                    </div>
+                </h:form>
+            </div>
+        </p:card>
+    </div>
+
+    <script>
+        function senhaVisivel(inputId, iconId) {
+            var input = document.getElementById(inputId);
+            var icon = document.getElementById(iconId);
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('pi-lock');
+                icon.classList.add('pi-unlock');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('pi-unlock');
+                icon.classList.add('pi-lock');
+            }
+        }
+    </script>
+</h:body>
+</html>
