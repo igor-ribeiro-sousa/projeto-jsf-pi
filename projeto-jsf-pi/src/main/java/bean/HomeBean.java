@@ -1,6 +1,7 @@
 package bean;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -29,7 +30,16 @@ public class HomeBean
 
    private void salvarPDF(byte[] pdfBytes) throws IOException
    {
-      try (FileOutputStream fileOutputStream = new FileOutputStream("c:/relatorio/relatorio.pdf"))
+      String diretorio = System.getProperty("user.home") + File.separator + "relatorio";
+      File diretorioRelatorio = new File(diretorio);
+      if (!diretorioRelatorio.exists())
+      {
+         diretorioRelatorio.mkdirs();
+      }
+
+      String caminhoRelatorio = diretorio + File.separator + "relatorio.pdf";
+
+      try (FileOutputStream fileOutputStream = new FileOutputStream(caminhoRelatorio))
       {
          fileOutputStream.write(pdfBytes);
          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Download feito com sucesso"));
@@ -50,7 +60,7 @@ public class HomeBean
 
       document.open();
       adicionarConteudo(document);
-//      adicionarDiagramaUML(document);
+      // adicionarDiagramaUML(document);
       document.close();
 
       return outputStream.toByteArray();
@@ -77,17 +87,5 @@ public class HomeBean
       document.add(new Paragraph("Lucas Silva"));
       document.add(new Paragraph("Petrus"));
    }
-
-   /*
-    * private void adicionarDiagramaUML(Document document) throws
-    * DocumentException, IOException { String diagramaUML = "@startuml\n" +
-    * "ClassDiagram\n" + "class Usuario\n" + "@enduml"; SourceStringReader
-    * reader = new SourceStringReader(diagramaUML); FileFormatOption fileFormat
-    * = new FileFormatOption(FileFormat.PNG); ByteArrayOutputStream outputStream
-    * = new ByteArrayOutputStream(); reader.generateImage(outputStream,
-    * fileFormat); com.itextpdf.text.Image img =
-    * com.itextpdf.text.Image.getInstance(outputStream.toByteArray());
-    * document.add(img); }
-    */
 
 }

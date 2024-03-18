@@ -13,7 +13,8 @@ import util.Util;
 public class Inicializacao implements ServletContextListener {
 
    @Override
-   public void contextInitialized(ServletContextEvent sce) {
+   public void contextInitialized(ServletContextEvent sce) 
+   {
        System.out.println("Tomcat está iniciando... Executando script SQL...");
        try {
            Usuario usuario = new Usuario();
