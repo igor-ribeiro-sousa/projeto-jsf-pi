@@ -14,6 +14,8 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -75,17 +77,17 @@ public class HomeBean
       document.add(new Paragraph(" "));
       document.add(new Paragraph("Sobre"));
       document.add(new Paragraph(" "));
-      document.add(new Paragraph("Olá! Seja bem vindo ao sistema de agendamentos desenvolvido por nossa equipe."));
-      document.add(new Paragraph("Esse é um sistema para agendamentos desenvolvido utilizando Java, JSF e Primefaces."));
-      document.add(new Paragraph(
-            "O projeto tem como objetivo principal abordar os conceitos de aplicações SPAs, Autenticação e Autorização com Tokens JWT e muito mais."));
-      document.add(new Paragraph("O código fonte do projeto pode ser acessado clicando no link Github no menu lateral."));
+      document.add(new Paragraph("Olá e seja muito bem-vindo ao projeto da disciplina de Projeto Integrador! Neste trabalho, estamos embarcando em uma jornada para desenvolver um sistema de agendamento de consultas, uma ferramenta essencial para otimizar a gestão de compromissos e impulsionar a eficiência em diversos setores."));
+      document.add(new Paragraph("Utilizando uma poderosa combinação de tecnologias de ponta, como Java, JSF e Primefaces, estamos construindo uma plataforma robusta e intuitiva para atender às demandas. Além disso, integramos funcionalidades CRUD (Create, Read, Update, Delete) para garantir uma gestão eficaz e abrangente dos dados."));
+      document.add(new Paragraph("Este projeto vai além da simples criação de um aplicativo funcional; é uma exploração dos conceitos fundamentais por trás das aplicações de página única (SPAs), Autenticação e Autorização. Estamos mergulhando fundo no JSF, explorando alguns detalhes do HTML, CSS e JavaScript para criar uma experiência de usuário envolvente e dinâmica."));
+      document.add(new Paragraph("Além disso, estamos comprometidos com as melhores práticas de programação, buscando um código limpo, organizado e escalável. Queremos entregar não apenas um produto funcional, mas também um código que seja fácil de compreender, manter e expandir no futuro."));
       document.add(new Paragraph(" "));
       document.add(new Paragraph("Integrantes:"));
-      document.add(new Paragraph(" "));
-      document.add(new Paragraph("Igor Ribeiro"));
-      document.add(new Paragraph("Lucas Silva"));
-      document.add(new Paragraph("Petrus"));
+      List listIntegrantes = new List(List.UNORDERED);
+      listIntegrantes.add(new ListItem("Antonio Igor Ribeiro"));
+      listIntegrantes.add(new ListItem("Lucas Silva"));
+      listIntegrantes.add(new ListItem("Petrus"));
+      document.add(listIntegrantes);
    }
 
 }
