@@ -21,16 +21,24 @@ import util.Util;
 public class UsuarioBean
 {
    private Usuario usuario = new Usuario();
+   
+   private String nomeUsuarioLogado;
+
    private String senhaConfirmacao;
+
    private String emailOriginal;
+
    private String nomeUsuarioPesquisa;
+
    private List<Usuario> usuarios = new ArrayList<Usuario>();
+
    private List<Usuario> listaResultado = new ArrayList<Usuario>();
+
    private boolean exibirResultadosPesquisa = false;
-   
-   @ManagedProperty(value="#{navegacaoBean}")
+
+   @ManagedProperty(value = "#{navegacaoBean}")
    private NavegacaoBean navegacaoBean;
-   
+
    public void inserir()
    {
       try
@@ -39,7 +47,7 @@ public class UsuarioBean
          {
             completarInserir();
             UsuarioDAO.inserir(usuario);
-            mensagemTela("inserido");
+            mensagemTela("inserido com sucesso!");
             navegarParaPesquisar();
          }
 
@@ -49,7 +57,7 @@ public class UsuarioBean
          throw new JSFException(e.getMessage());
       }
    }
-   
+
    public void alterar()
    {
       try
@@ -58,7 +66,7 @@ public class UsuarioBean
          {
             completarAlterar();
             UsuarioDAO.alterar(usuario);
-            mensagemTela("alterado");
+            mensagemTela("alterado com sucesso!");
             navegarParaPesquisar();
          }
 
@@ -69,7 +77,7 @@ public class UsuarioBean
       }
    }
 
-   private void completarInserir()
+   public void completarInserir()
    {
       this.usuario.setNome(this.usuario.getNome().toUpperCase().trim());
       this.usuario.setEmail(this.usuario.getEmail().toUpperCase().trim());
@@ -77,41 +85,60 @@ public class UsuarioBean
       this.usuario.setDataInclusao(new Date());
       this.usuario.setFlagAtivo("S");
    }
-   
-   private void completarAlterar()
+
+   public void completarAlterar()
    {
       this.usuario.setNome(this.usuario.getNome().toUpperCase().trim());
       this.usuario.setEmail(this.usuario.getEmail().toUpperCase().trim());
    }
-   
-   private void mensagemTela(String acao)
+
+   public void mensagemTela(String mensagem)
    {
-      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Usuario "+acao+" com sucesso"));
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Usuario " + mensagem));
    }
-   
-   private void navegarParaPesquisar()
+
+   public void navegarParaPesquisar()
    {
       this.usuario = new Usuario();
       navegacaoBean.setCurrentPage("usuario-pesquisar.xhtml");
    }
    
-   public boolean pesquisarPorEmail(String email)
+   public String pesquisarUsuarioPorEmail(String email)
    {
       try
       {
          if (email != null && !("").equals(email))
          {
-            return UsuarioDAO.pesquisarPorEmail(email.toUpperCase().trim());
+            setNomeUsuarioLogado(UsuarioDAO.pesquisarUsuarioPorEmail(email.toUpperCase().trim()));
+            return getNomeUsuarioLogado();
          }
 
       }
       catch (JSFException e)
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", e.getMessage()));
+         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", e.getMessage()));
       }
-      return false;
+      return null;
    }
-   
+
+   public boolean existeUsuarioPorEmail(String email)
+   {
+      if (email == null || email.trim().isEmpty())
+      {
+         return false;
+      }
+
+      try
+      {
+         return UsuarioDAO.existeUsuarioPorEmail(email.toUpperCase().trim());
+      }
+      catch (JSFException e)
+      {
+         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", e.getMessage()));
+         return false;
+      }
+   }
+
    public void pesquisarPorNome()
    {
       try
@@ -121,17 +148,17 @@ public class UsuarioBean
             this.listaResultado = UsuarioDAO.pesquisarPorUsuario(this.nomeUsuarioPesquisa.toUpperCase().trim());
             this.exibirResultadosPesquisa = true;
          }
-         else {
+         else
+         {
             this.listaResultado = UsuarioDAO.pesquisar();
          }
 
       }
       catch (JSFException e)
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", e.getMessage()));
+         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", e.getMessage()));
       }
    }
-
 
    public void editar(Usuario usuario)
    {
@@ -147,7 +174,7 @@ public class UsuarioBean
       }
 
    }
-   
+
    public void deletar(Integer id)
    {
       try
@@ -164,108 +191,112 @@ public class UsuarioBean
 
    private boolean validarInserir()
    {
-      if (Objects.isNull(this.usuario.getNome()) || ("").equals(this.usuario.getNome()))
+      if (isCampoVazio(usuario.getNome()))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nome usuário obrigatório"));
+         addMensagemErro("Nome usuário obrigatório");
          return false;
       }
 
-      if (Objects.isNull(this.usuario.getSenha()) || ("").equals(this.usuario.getSenha()))
+      if (isCampoVazio(usuario.getSenha()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Senha obrigatória"));
+         addMensagemErro("Senha obrigatória");
          return false;
       }
 
-      if (Objects.isNull(getSenhaConfirmacao()) || ("").equals(getSenhaConfirmacao()))
+      if (isCampoVazio(getSenhaConfirmacao()))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Senha confirmacao obrigatória"));
+         addMensagemErro("Senha confirmação obrigatória");
          return false;
       }
 
-      if (!this.usuario.getSenha().equals(getSenhaConfirmacao()))
+      if (!usuario.getSenha().equals(getSenhaConfirmacao()))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Senha de confirmação diferente"));
+         addMensagemErro("Senha de confirmação diferente");
          return false;
       }
 
-      if (Objects.isNull(this.usuario.getEmail()) || ("").equals(this.usuario.getEmail()))
+      if (isCampoVazio(usuario.getEmail()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email obrigatório"));
+         addMensagemErro("E-mail obrigatório");
          return false;
       }
 
-      if (!Util.validarEmail(this.usuario.getEmail()))
+      if (!Util.validarEmail(usuario.getEmail()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email inválido"));
-         return false;
-      }
-      if (pesquisarPorEmail(this.usuario.getEmail()))
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email já cadastrado"));
+         addMensagemErro("E-mail inválido");
          return false;
       }
 
-      if (Objects.isNull(this.usuario.getDataNascimento()) || ("").equals(this.usuario.getDataNascimento()))
+      if (existeUsuarioPorEmail(usuario.getEmail()))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Data de nascimento obrigatória"));
+         addMensagemErro("E-mail já cadastrado");
          return false;
       }
 
-      if (this.usuario.getDataNascimento().after(new Date()))
+      if (Objects.isNull(usuario.getDataNascimento()))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Data de nascimento nao pode ser maior que hoje"));
+         addMensagemErro("Data de nascimento obrigatória");
          return false;
-
       }
+
+      if (usuario.getDataNascimento().after(new Date()))
+      {
+         addMensagemErro("Data de nascimento não pode ser maior que hoje");
+         return false;
+      }
+
       return true;
    }
-   
+
    private boolean validarAlterar()
    {
-      if (Objects.isNull(this.usuario.getNome()) || ("").equals(this.usuario.getNome()))
+      if (isCampoVazio(usuario.getNome()))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nome usuário obrigatório"));
+         addMensagemErro("Nome usuário obrigatório");
          return false;
       }
 
-      if (Objects.isNull(this.usuario.getEmail()) || ("").equals(this.usuario.getEmail()))
+      if (isCampoVazio(usuario.getEmail()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email obrigatório"));
+         addMensagemErro("E-mail obrigatório");
          return false;
       }
 
-      if (!Util.validarEmail(this.usuario.getEmail()))
+      if (!Util.validarEmail(usuario.getEmail()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email inválido"));
-         return false;
-      }
-      if (pesquisarPorEmail(this.usuario.getEmail()) && !this.usuario.getEmail().equalsIgnoreCase(emailOriginal))
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email já cadastrado"));
+         addMensagemErro("E-mail inválido");
          return false;
       }
 
-      if (Objects.isNull(this.usuario.getDataNascimento()) || ("").equals(this.usuario.getDataNascimento()))
+      if (existeUsuarioPorEmail(usuario.getEmail()) && !usuario.getEmail().equalsIgnoreCase(emailOriginal))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Data de nascimento obrigatória"));
+         addMensagemErro("E-mail já cadastrado");
          return false;
       }
 
-      if (this.usuario.getDataNascimento().after(new Date()))
+      if (Objects.isNull(usuario.getDataNascimento()))
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Data de nascimento nao pode ser maior que hoje"));
+         addMensagemErro("Data de nascimento obrigatória");
          return false;
-
       }
+
+      if (usuario.getDataNascimento().after(new Date()))
+      {
+         addMensagemErro("Data de nascimento não pode ser maior que hoje");
+         return false;
+      }
+
       return true;
+   }
+
+   private boolean isCampoVazio(String campo)
+   {
+      return campo == null || campo.trim().isEmpty();
+   }
+
+   private void addMensagemErro(String mensagem)
+   {
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", mensagem));
    }
 
    public List<Usuario> getUsuarios()
@@ -357,6 +388,16 @@ public class UsuarioBean
    public void setEmailOriginal(String emailOriginal)
    {
       this.emailOriginal = emailOriginal;
+   }
+
+   public String getNomeUsuarioLogado()
+   {
+      return nomeUsuarioLogado;
+   }
+
+   public void setNomeUsuarioLogado(String nomeUsuarioLogado)
+   {
+      this.nomeUsuarioLogado = nomeUsuarioLogado;
    }
 
 }

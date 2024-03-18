@@ -39,7 +39,7 @@ public class UsuarioDAO
       }
    }
 
-   public static boolean pesquisarPorEmail(String email)
+   public static boolean existeUsuarioPorEmail(String email)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
@@ -65,6 +65,37 @@ public class UsuarioDAO
       }
    }
 
+   public static String pesquisarUsuarioPorEmail(String email)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+      String nomeUsuariosuarioEncontrado = null;
+
+      try
+      {
+         Query query = entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email");
+         query.setParameter("email", email);
+
+         List<Usuario> resultados = query.getResultList();
+         if (!resultados.isEmpty())
+         {
+            nomeUsuariosuarioEncontrado = resultados.get(0).getNome();
+         }
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+
+      return nomeUsuariosuarioEncontrado;
+   }
+
    public static List<Usuario> pesquisarPorUsuario(String nomeUsuario)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
@@ -85,36 +116,6 @@ public class UsuarioDAO
       finally
       {
          if (entityManager != null && entityManager.isOpen())
-         {
-            entityManager.close();
-         }
-      }
-   }
-
-   public static Integer obterCodigoPeloNome(String nomeUsuario)
-   {
-      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
-
-      try
-      {
-         Query query = entityManager.createQuery("SELECT u.id FROM Usuario u WHERE u.nome LIKE :nomeUsuario AND u.flagAtivo = 'S'");
-
-         query.setParameter("nomeUsuario", "%" + nomeUsuario + "%");
-
-         Integer codigoUsuario = (Integer) query.getSingleResult();
-         return codigoUsuario;
-      }
-      catch (NoResultException e)
-      {
-         return null;
-      }
-      catch (Exception e)
-      {
-         return null;
-      }
-      finally
-      {
-         if (entityManager != null)
          {
             entityManager.close();
          }
@@ -211,6 +212,32 @@ public class UsuarioDAO
    private static void alterar(Usuario usuario, EntityManager entityManager)
    {
       entityManager.merge(usuario);
+   }
+
+   public static boolean logar(String email, String senha)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+      try
+      {
+         Query query = entityManager
+               .createQuery("SELECT u FROM Usuario u WHERE u.email = :email AND u.senha = :senha AND u.flagAtivo = 'S'");
+         query.setParameter("email", email);
+         query.setParameter("senha", senha);
+
+         List<Usuario> resultList = query.getResultList();
+         return !resultList.isEmpty();
+      }
+      catch (NoResultException e)
+      {
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
    }
 
    public static void excluir(Integer id)
