@@ -19,7 +19,7 @@ public class Inicializacao implements ServletContextListener {
        try {
            Usuario usuario = new Usuario();
            usuario.setNome("SEU ZEZINHO");
-           usuario.setEmail("ADMIN@MAIL.COM");
+           usuario.setEmail("IGORRIBEIROCONS@GMAIL.COM");
            usuario.setSenha(Util.gerarHashSenha("123"));
            usuario.setDataInclusao(new Date());
            usuario.setDataNascimento(new SimpleDateFormat("dd/MM/yyyy").parse("17/08/1996"));

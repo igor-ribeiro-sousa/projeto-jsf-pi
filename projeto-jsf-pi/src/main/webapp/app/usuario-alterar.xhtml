@@ -33,6 +33,10 @@
 			width: 80rem; /* Defina a largura desejada */
 			margin-bottom: 2em;
 		}
+		.form-container label {
+			display: block;
+			font-weight: bold;
+		}
 	</style>
 	<script>
 		PrimeFaces.locales['pt'] = {
@@ -72,73 +76,70 @@
 				Usuário - Alterar
 			</f:facet>
 
-			<h:form id="formulario">
+			<div class="form-container">
+				<h:form id="formulario">
 
-				<p:messages id="messages" showDetail="true" closable="true">
-					<p:autoUpdate />
-				</p:messages>
+					<p:messages id="messages" showDetail="true" closable="true">
+						<p:autoUpdate />
+					</p:messages>
 
-				<div class="ui-g">
+					<div class="ui-g">
 
-					<div class="ui-g-12">
-						<span class="ui-input-icon-left"> <i class="pi pi-user" />
-							<p:inputText style="width: 77rem;"
-								id="nome"
-								value="#{usuarioBean.usuario.nome}"
-								placeholder="Digite o nome do usuário" />
-						</span>
+						<div class="ui-g-12">
+						<p:outputLabel value="Nome Usuário:" />
+							<span class="ui-input-icon-left"> <i class="pi pi-user" />
+								<p:inputText style="width: 77rem;" id="nome"
+									value="#{usuarioBean.usuario.nome}"
+									placeholder="Digite o nome do usuário" />
+							</span>
+						</div>
+
+						<div class="ui-g-12">
+						<p:outputLabel value="E-mail:" />
+							<div class="input-container">
+								<span class="ui-input-icon-left"> <i
+									class="pi pi-envelope" /> <p:inputText style="width: 77rem;"
+										id="email" value="#{usuarioBean.usuario.email}"
+										placeholder="Digite o endereço de e-mail" />
+								</span>
+							</div>
+						</div>
+
+						<div class="ui-g-4">
+						<p:outputLabel value="Data de Nascimento:" />
+							<div class="ui-input-icon-left">
+								<p:calendar id="mask"
+									value="#{usuarioBean.usuario.dataNascimento}"
+									placeholder="Data de nascimento" pattern="dd/MM/yyyy"
+									mask="true" yearRange="c-100:c" showButtonPanel="true"
+									navigator="true" showIcon="true" showOn="button" />
+							</div>
+						</div>
+
+						<div class="ui-g-4">
+							<p:selectOneRadio id="line"
+								value="#{usuarioBean.usuario.flagAtivo}" layout="lineDirection">
+								<f:selectItem itemLabel="Ativo" itemValue="S" />
+								<f:selectItem itemLabel="Inativo" itemValue="N" />
+							</p:selectOneRadio>
+						</div>
+
 					</div>
 
 					<div class="ui-g-12">
-						<div class="input-container">
-							<span class="ui-input-icon-left"> <i
-								class="pi pi-envelope" /> <p:inputText style="width: 77rem;"
-									id="email"
-									value="#{usuarioBean.usuario.email}"
-									placeholder="Digite o endereço de e-mail" />
-							</span>
+						<div style="display: flex; justify-content: flex-end; gap: 10px;">
+							<p:commandButton value="Voltar"
+								actionListener="#{usuarioBean.navegarParaPesquisar}"
+								styleClass="ui-button-secondary" update="contentPanel" />
+
+							<p:commandButton value="Alterar" icon="pi pi-check"
+								action="#{usuarioBean.alterar}" update="contentPanel"
+								styleClass="ui-button-success" />
 						</div>
 					</div>
 
-					<div class="ui-g-4">
-					    <div class="ui-input-icon-left">
-			            	<p:calendar id="mask" 
-			            	 	value="#{usuarioBean.usuario.dataNascimento}"
-			            	 	placeholder="Data de nascimento" 
-			            	 	pattern="dd/MM/yyyy" 
-			            	 	mask="true"
-			            	 	yearRange="c-100:c"
-			                    showButtonPanel="true"
-			                    navigator="true"
-			                    showIcon="true"
-			                    showOn="button"
-			                    />	
-					    </div>
-					</div>
-					
-					<div class="ui-g-4">
-						<p:selectOneRadio id="line"
-							value="#{usuarioBean.usuario.flagAtivo}" layout="lineDirection">
-							<f:selectItem itemLabel="Ativo" itemValue="S" />
-							<f:selectItem itemLabel="Inativo" itemValue="N" />
-						</p:selectOneRadio>
-					</div>
-
-				</div>
-
-				<div class="ui-g-12">
-					<div style="display: flex; justify-content: flex-end; gap: 10px;">
-						<p:commandButton value="Voltar"
-							actionListener="#{navegacaoBean.setCurrentPage('usuario-pesquisar.xhtml')}"
-							styleClass="ui-button-secondary" update="contentPanel" />
-						<p:commandButton value="Alterar" icon="pi pi-check"
-							action="#{usuarioBean.alterar}" update="contentPanel"
-							styleClass="ui-button-success" />
-					</div>
-				</div>
-
-
-			</h:form>
+				</h:form>
+			</div>
 		</p:card>
 	</div>
 	<script>
@@ -156,7 +157,7 @@
 				icon.classList.add('pi-lock');
 			}
 		}
-		
+
 		window.onload = function() {
 			var emailOriginal = document.getElementById('emailOriginal').value;
 		};

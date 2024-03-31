@@ -44,13 +44,18 @@
         #formulario {
             text-align: left;
         }
+        
+        .form-container label {
+            display: block;
+            font-weight: bold;
+        }
+
     </style>
 </h:head>
 
 <h:body>
     <div class="card-container" style="text-align: center;">
         <p:card styleClass="card">
-            
             <div class="card-header">
                 <img src="../assets/logo.png" alt="Logo" style="max-width: 35%; height: auto;"/>
             </div><br/>
@@ -60,42 +65,35 @@
             </p:messages>
 
             <div class="form-container">
-                <h:form id="formulario" style="width: 90%;">
+                <h:form id="formulario">
+                	<h2 style="text-align: center;">PROJETO INTEGRADOR - ENGENHARIA DE SOFTWARE</h2>
                     <div class="ui-g">
+                    
                         <div class="ui-g-12">
-                            <div class="input-container">
-                                <span class="ui-input-icon-right"> 
-                                    <i class="pi pi-envelope" /> 
-                                    <p:inputText style="width: 33rem;" id="email" value="#{loginBean.login.login}" placeholder="Digite seu e-mail" />
-                                </span>
+                            <p:outputLabel for="email" value="Email:"/>
+                            <div class="ui-input-icon-right">
+                                <i class="pi pi-envelope"/>
+                                <p:inputText id="email" value="#{loginBean.login.login}" placeholder="Digite seu e-mail" style="width: 38rem;"/>
                             </div>
                         </div>
-
-						<div class="ui-g-12">
-							<div class="input-container">
-								<span class="ui-input-icon-left"> <i class="pi pi-lock" />
-									<p:password
-										style="width: 33rem;"
-										id="senhaInput" value="#{loginBean.login.senha}"
-										placeholder="Digite sua senha" toggleMask="true" /> <i
-									class="pi" id="mostrarSenhaIcon" style="cursor: pointer;"
-									onclick="senhaVisivel('senhaInput', 'mostrarSenhaIcon')" />
-								</span> 
-							</div>
-							
-						</div>
-						<a href="#" style="color: #007bff; 
-										   text-decoration: none; 
-								  		   font-weight: bold;
-										   margin-left:0.5rem; 
-										   font-size:15px;">Esqueci a senha</a>
-						
-
-
-					</div><br/>
+                        
+                        <div class="ui-g-12">
+                            <p:outputLabel for="senhaInput" value="Senha:"/>
+                            <div class="ui-input-icon-left">
+                                <i class="pi pi-lock"/>
+                                <p:password id="senhaInput" value="#{loginBean.login.senha}" placeholder="Digite sua senha" style="width: 38rem;" toggleMask="true"/>
+                                <i class="pi" id="mostrarSenhaIcon" style="cursor: pointer;" onclick="senhaVisivel('senhaInput', 'mostrarSenhaIcon')"/>
+                            </div>
+                        </div>
+                        
+                        <div class="ui-g-12">
+                            <h:commandLink value="Esqueceu a senha?" action="#{loginBean.esqueciSenha}" style="color: #007bff; text-decoration: none; font-weight: bold; font-size: 15px;"/>
+                        </div>
+                        
+                    </div><br/>
 
                     <div class="ui-g-12">
-                        <p:commandButton style="width: 33rem;" value="Entrar" icon="pi pi-check" action="#{loginBean.logar}" update="formulario" styleClass="ui-button-success" />
+                        <p:commandButton style="width: 100%" value="Entrar" icon="pi pi-check" action="#{loginBean.logar}" update="formulario" styleClass="ui-button-success"/>
                     </div>
                 </h:form>
             </div>

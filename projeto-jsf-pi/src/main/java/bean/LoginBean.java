@@ -1,13 +1,9 @@
 package bean;
 
-import java.util.Objects;
-
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 
 import dao.UsuarioDAO;
@@ -19,14 +15,15 @@ import util.Util;
 public class LoginBean
 {
 
-   private Login login;
+   private Login login = new Login();
 
    @ManagedProperty(value = "#{usuarioBean}")
    private UsuarioBean usuarioBean;
 
-   public LoginBean()
+   public String esqueciSenha()
    {
       this.login = new Login();
+      return "/seguranca/recupera-senha.xhtml?faces-redirect=true";
    }
 
    public String logar()
@@ -41,19 +38,16 @@ public class LoginBean
             {
                HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
                session.setAttribute("usuario", login);
-               usuarioBean.mensagemTela("logado");
                return "/app/navegacao.xhtml?faces-redirect=true";
             }
             else
             {
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Usuário e/ou senha inválidos."));
-               FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-               return "/seguranca/index.xhtml?faces-redirect=true";
+               Util.addMensagemErro("Usuário e/ou senha inválidos.");
             }
          }
          catch (Exception e)
          {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ocorreu um erro ao tentar fazer login. Por favor, tente novamente."));
+            Util.addMensagemErro("Ocorreu um erro ao tentar fazer login. Por favor, tente novamente.");
          }
       }
       return null;
@@ -67,21 +61,21 @@ public class LoginBean
 
    private boolean validarLogar()
    {
-      if (Objects.isNull(getLogin().getLogin()) || getLogin().getLogin().isEmpty())
+      if (Util.isCampoNullOrVazio(getLogin().getLogin()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "E-mail obrigatório"));
+         Util.addMensagemErro("E-mail obrigatório");
          return false;
       }
 
-      if (!Util.validarEmail(getLogin().getLogin()))
+      if (!Util.validarEmail(getLogin().getLogin().trim()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "E-mail inválido"));
+         Util.addMensagemErro("E-mail inválido");
          return false;
       }
 
-      if (Objects.isNull(getLogin().getSenha()) || getLogin().getSenha().isEmpty())
+      if (Util.isCampoNullOrVazio(getLogin().getSenha()))
       {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Senha obrigatória"));
+         Util.addMensagemErro("Senha obrigatória");
          return false;
       }
 

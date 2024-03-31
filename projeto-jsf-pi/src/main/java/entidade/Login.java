@@ -1,40 +1,51 @@
 package entidade;
 
-public class Login
-{
+import java.util.Date;
 
-   private String login;
+public class Login {
 
-   private String senha;
+	private String login;
 
-   public Login()
-   {
-   }
+	private String senha;
 
-   public Login(String login, String senha)
-   {
-      this.login = login;
-      this.senha = senha;
-   }
+	private Date dataNascimento;
 
-   public String getLogin()
-   {
-      return login;
-   }
+	public Login() {
+	}
 
-   public void setLogin(String login)
-   {
-      this.login = login;
-   }
+	public Login(String login, String senha) {
+	   this.login = login;
+	   this.senha = senha;
+	}
+	
+	public Login(String login, String senha, Date dataNascimento) {
+		this.login = login;
+		this.senha = senha;
+		this.dataNascimento = dataNascimento;
+	}
 
-   public String getSenha()
-   {
-      return senha;
-   }
+	public String getLogin() {
+		return login;
+	}
 
-   public void setSenha(String senha)
-   {
-      this.senha = senha;
-   }
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
 
 }

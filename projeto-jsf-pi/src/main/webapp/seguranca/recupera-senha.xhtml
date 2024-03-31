@@ -7,7 +7,7 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
-    <title>Projeto JSF-PI</title>
+    <title>Esqueci a senha</title>
     <style>
         html, body {
             height: 100%;
@@ -44,13 +44,46 @@
         #formulario {
             text-align: left;
         }
+
+        .form-container label {
+            display: block;
+            font-weight: bold;
+        }
     </style>
+    <script>
+		PrimeFaces.locales['pt'] = {
+	            closeText: 'Fechar',
+	            prevText: 'Anterior',
+	            nextText: 'Próximo',
+	            currentText: 'Começo',
+	            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+	            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+	            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+	            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+	            dayNamesMin: ['D','S','T','Q','Q','S','S'],
+	            weekHeader: 'Semana',
+	            firstDay: 1,
+	            isRTL: false,
+	            showMonthAfterYear: false,
+	            yearSuffix: '',
+	            timeOnlyTitle: 'Só Horas',
+	            timeText: 'Tempo',
+	            hourText: 'Hora',
+	            minuteText: 'Minuto',
+	            secondText: 'Segundo',
+	            currentText: 'Data Atual',
+	            ampm: false,
+	            month: 'Mês',
+	            week: 'Semana',
+	            day: 'Dia',
+	            allDayText : 'Todo Dia'
+		    };
+	</script>
 </h:head>
 
 <h:body>
-    <div class="card-container" style="text-align: center;">
+    <div class="card-container">
         <p:card styleClass="card">
-            
             <div class="card-header">
                 <img src="../assets/logo.png" alt="Logo" style="max-width: 35%; height: auto;"/>
             </div><br/>
@@ -59,64 +92,43 @@
                 <p:autoUpdate />
             </p:messages>
 
-            <div class="form-container">
-                <h:form id="formulario" style="width: 90%;">
+           <div class="form-container">
+                <h:form id="formulario">
+                    <h2 style="text-align: center;">Recuperação de Senha</h2>
                     <div class="ui-g">
+                        
                         <div class="ui-g-12">
-                            <div class="input-container">
-                                <span class="ui-input-icon-right"> 
-                                    <i class="pi pi-envelope" /> 
-                                    <p:inputText style="width: 33rem;" id="email" value="#{loginBean.login.login}" placeholder="Digite seu e-mail" />
-                                </span>
+                            <p:outputLabel for="email" value="Email:"/>
+                            <div class="ui-input-icon-right">
+                                <i class="pi pi-envelope"/>
+                                <p:inputText id="email" style="width: 38rem;" value="#{recuperarSenhaBean.email}" placeholder="Digite seu e-mail"/>
                             </div>
                         </div>
+                        
+                        <div class="ui-g-12">
+                            <p:outputLabel for="mask" value="Data de Nascimento:"/>
+                            <p:calendar id="mask" value="#{recuperarSenhaBean.dataNascimento}" placeholder="Data de nascimento" pattern="dd/MM/yyyy" mask="true" yearRange="c-100:c"
+                                showButtonPanel="true" navigator="true" showIcon="true" showOn="button"/>
+                        </div>
+                    </div><br/>
 
-						<div class="ui-g-12">
-							<div class="input-container">
-								<span class="ui-input-icon-left"> <i class="pi pi-lock" />
-									<p:password
-										style="width: 33rem;"
-										id="senhaInput" value="#{loginBean.login.senha}"
-										placeholder="Digite sua senha" toggleMask="true" /> <i
-									class="pi" id="mostrarSenhaIcon" style="cursor: pointer;"
-									onclick="senhaVisivel('senhaInput', 'mostrarSenhaIcon')" />
-								</span> 
-							</div>
-							
+					<div class="ui-g" style="justify-content: space-between;">
+						<div class="ui-g-6">
+							<p:commandButton value="Voltar" icon="pi pi-arrow-left"
+								action="#{loginBean.logout}" update="formulario"
+								styleClass="ui-button-secondary" />
 						</div>
-						<a href="#" style="color: #007bff; 
-										   text-decoration: none; 
-								  		   font-weight: bold;
-										   margin-left:0.5rem; 
-										   font-size:15px;">Esqueci a senha</a>
-						
+						<div class="ui-g-6" style="text-align: right;">
+							<p:commandButton value="Entrar" icon="pi pi-check"
+								action="#{recuperarSenhaBean.recuperarSenha}" update="formulario"
+								styleClass="ui-button-success" />
+						</div>
+					</div>
 
-
-					</div><br/>
-
-                    <div class="ui-g-12">
-                        <p:commandButton style="width: 33rem;" value="Entrar" icon="pi pi-check" action="#{loginBean.logar}" update="formulario" styleClass="ui-button-success" />
-                    </div>
-                </h:form>
+				</h:form>	
             </div>
         </p:card>
     </div>
 
-    <script>
-        function senhaVisivel(inputId, iconId) {
-            var input = document.getElementById(inputId);
-            var icon = document.getElementById(iconId);
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('pi-lock');
-                icon.classList.add('pi-unlock');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('pi-unlock');
-                icon.classList.add('pi-lock');
-            }
-        }
-    </script>
 </h:body>
 </html>

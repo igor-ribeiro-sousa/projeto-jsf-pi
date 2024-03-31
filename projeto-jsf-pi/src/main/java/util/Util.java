@@ -2,8 +2,12 @@ package util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 public class Util
 {
@@ -36,5 +40,26 @@ public class Util
          return null;
       }
    }
+   
+   public static boolean isCampoNullOrVazio(String campo)
+   {
+      return Objects.isNull(campo) || campo.trim().isEmpty();
+   }
+
+   public static void addMensagemErro(String mensagem)
+   {
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", mensagem));
+   }
+   
+   public static void addMensagemWarn(String mensagem)
+   {
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", mensagem));
+   }
+   
+   public static void addMensagemInfo(String mensagem)
+   {
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", mensagem));
+   }
+
 
 }

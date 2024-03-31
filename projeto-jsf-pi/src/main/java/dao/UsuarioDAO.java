@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -223,6 +224,32 @@ public class UsuarioDAO
                .createQuery("SELECT u FROM Usuario u WHERE u.email = :email AND u.senha = :senha AND u.flagAtivo = 'S'");
          query.setParameter("email", email);
          query.setParameter("senha", senha);
+
+         List<Usuario> resultList = query.getResultList();
+         return !resultList.isEmpty();
+      }
+      catch (NoResultException e)
+      {
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+   }
+   
+   public static boolean recuperarSenha(String email, Date dataNascimento)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+      try
+      {
+         Query query = entityManager
+               .createQuery("SELECT u FROM Usuario u WHERE u.email = :email AND u.dataNascimento = :dataNascimento AND u.flagAtivo = 'S'");
+         query.setParameter("email", email);
+         query.setParameter("dataNascimento", dataNascimento);
 
          List<Usuario> resultList = query.getResultList();
          return !resultList.isEmpty();

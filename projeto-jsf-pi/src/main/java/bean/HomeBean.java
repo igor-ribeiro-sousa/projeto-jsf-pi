@@ -19,6 +19,8 @@ import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import util.Util;
+
 @ManagedBean
 @SessionScoped
 public class HomeBean
@@ -44,12 +46,11 @@ public class HomeBean
       try (FileOutputStream fileOutputStream = new FileOutputStream(caminhoRelatorio))
       {
          fileOutputStream.write(pdfBytes);
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Download feito com sucesso"));
+         Util.addMensagemInfo("Download feito com sucesso");
       }
       catch (IOException e)
       {
-         FacesContext.getCurrentInstance().addMessage(null,
-               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao realizar o download", ""));
+         Util.addMensagemErro("Erro ao realizar o download");
          throw e;
       }
    }
@@ -62,7 +63,6 @@ public class HomeBean
 
       document.open();
       adicionarConteudo(document);
-      // adicionarDiagramaUML(document);
       document.close();
 
       return outputStream.toByteArray();
