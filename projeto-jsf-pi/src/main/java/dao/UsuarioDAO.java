@@ -180,7 +180,7 @@ public class UsuarioDAO
       entityManager.persist(usuairo);
    }
 
-   public static void alterar(Usuario usuairo)
+   public static Usuario alterar(Usuario usuario)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       EntityTransaction transaction = entityManager.getTransaction();
@@ -188,9 +188,9 @@ public class UsuarioDAO
       try
       {
          transaction.begin();
-         alterar(usuairo, entityManager);
+         usuario = alterar(usuario, entityManager);
          transaction.commit();
-
+         return usuario;
       }
       catch (Exception e)
       {
@@ -198,21 +198,20 @@ public class UsuarioDAO
          {
             transaction.rollback();
          }
-         throw new JSFException("Erro ao alterar a usuario: " + e.getMessage());
-
+         throw new JSFException("Erro ao alterar o usuário: " + e.getMessage());
       }
       finally
       {
-         if (entityManager != null)
+         if (entityManager != null && entityManager.isOpen())
          {
             entityManager.close();
          }
       }
    }
 
-   private static void alterar(Usuario usuario, EntityManager entityManager)
+   private static Usuario alterar(Usuario usuario, EntityManager entityManager)
    {
-      entityManager.merge(usuario);
+      return entityManager.merge(usuario);
    }
 
    public static boolean logar(String email, String senha)

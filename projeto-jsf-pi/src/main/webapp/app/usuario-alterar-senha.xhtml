@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Alterar Senha</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        body {
+            background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28, #141d2e);
+        }
+        
+        .card-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .card-header {
+            text-align: center;
+        }
+        
+        .card {
+            width: 40rem;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        #formulario {
+            text-align: left;
+        }
+
+        .form-container label {
+            display: block;
+            font-weight: bold;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="card-container">
+        <p:card styleClass="card">
+            <div class="card-header">
+                <img src="../assets/logo.png" alt="Logo" style="max-width: 35%; height: auto;"/>
+            </div><br/>
+
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+           <div class="form-container">
+                <h:form id="formulario">
+                    <h2 style="text-align: center;">Alterar senha</h2>
+                    <div class="ui-g">
+                    	<div class="ui-g-12">
+							<p:outputLabel value="Senha atual" />
+							<span class="ui-input-icon-left"> <i class="pi pi-lock" />
+								<p:password style="width: 38rem;" id="senhaInput"
+									value="#{usuarioBean.senhaAtual}"
+									placeholder="Digite sua senha" toggleMask="true" /> <i
+								class="pi" id="mostrarSenhaIcon" style="cursor: pointer;"
+								onclick="senhaVisivel('senhaInput', 'mostrarSenhaIcon')" />
+							</span>
+						</div>
+                    
+                        <div class="ui-g-12">
+							<p:outputLabel value="Nova Senha:" />
+							<span class="ui-input-icon-left"> <i class="pi pi-lock" />
+								<p:password style="width: 38rem;" id="senhaNovaInput"
+									value="#{usuarioBean.usuario.senha}"
+									placeholder="Digite sua senha" toggleMask="true" /> <i
+								class="pi" id="mostrarSenhaNovaIcon" style="cursor: pointer;"
+								onclick="senhaVisivel('senhaInput', 'mostrarSenhaIcon')" />
+							</span>
+						</div>
+
+						<div class="ui-g-12">
+							<p:outputLabel value="Confirmação Senha:" />
+							<span class="ui-input-icon-left"> <i class="pi pi-lock" />
+								<p:password style="width: 38rem;" id="senhaConfirmacaoNovaInput"
+									value="#{usuarioBean.senhaConfirmacao}"
+									placeholder="Confirmar sua senha" toggleMask="true" /> <i
+								class="pi" id="mostrarSenhaNovaConfirmacaoIcon"
+								style="cursor: pointer;"
+								onclick="senhaVisivel('senhaConfirmacaoInput', 'mostrarSenhaConfirmacaoIcon')" />
+							</span>
+						</div>
+                       
+                    </div><br/>
+
+					<div class="ui-g" style="justify-content: space-between;">
+						<div class="ui-g-6">
+							<p:commandButton value="Voltar" icon="pi pi-arrow-left"
+								action="#{usuarioBean.navegarParaAlterar}" update="contentPanel"
+								styleClass="ui-button-secondary" />
+						</div>
+						<div class="ui-g-6" style="text-align: right;">
+							<p:commandButton value="Alterar senha!" icon="pi pi-check"
+								action="#{usuarioBean.alterarSenha}" update="contentPanel"
+								styleClass="ui-button-success" />
+						</div>
+					</div>
+
+				</h:form>	
+            </div>
+        </p:card>
+    </div>
+    <script>
+		function senhaVisivel(inputId, iconId) {
+			var input = document.getElementById(inputId);
+			var icon = document.getElementById(iconId);
+
+			if (input.type === 'password') {
+				input.type = 'text';
+				icon.classList.remove('pi-lock');
+				icon.classList.add('pi-unlock');
+			} else {
+				input.type = 'password';
+				icon.classList.remove('pi-unlock');
+				icon.classList.add('pi-lock');
+			}
+		}
+	</script>
+
+</h:body>
+</html>

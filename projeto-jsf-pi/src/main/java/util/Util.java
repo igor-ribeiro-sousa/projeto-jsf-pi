@@ -40,7 +40,7 @@ public class Util
          return null;
       }
    }
-   
+
    public static boolean isCampoNullOrVazio(String campo)
    {
       return Objects.isNull(campo) || campo.trim().isEmpty();
@@ -50,16 +50,15 @@ public class Util
    {
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", mensagem));
    }
-   
+
    public static void addMensagemWarn(String mensagem)
    {
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", mensagem));
    }
-   
+
    public static void addMensagemInfo(String mensagem)
    {
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", mensagem));
    }
-
 
 }

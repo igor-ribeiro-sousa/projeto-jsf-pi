@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "TBL_USR")
@@ -39,7 +40,7 @@ public class Usuario
    @Column(name = "DT_INC")
    @Temporal(TemporalType.TIMESTAMP)
    private Date dataInclusao;
-
+   
    public Integer getId()
    {
       return id;
@@ -109,5 +110,4 @@ public class Usuario
    {
       this.email = email;
    }
-
 }

@@ -22,6 +22,7 @@ public class UsuarioBean
    private String nomeUsuarioLogado;
    private String senhaConfirmacao;
    private String emailOriginal;
+   private String senhaAtual;
    private String nomeUsuarioPesquisa;
    private List<Usuario> usuarios = new ArrayList<Usuario>();
    private List<Usuario> listaResultado = new ArrayList<Usuario>();
@@ -50,6 +51,21 @@ public class UsuarioBean
          throw new JSFException(e.getMessage());
       }
    }
+   
+   public void completarInserir()
+   {
+      this.usuario.setNome(this.usuario.getNome().toUpperCase().trim());
+      this.usuario.setEmail(this.usuario.getEmail().toUpperCase().trim());
+      this.usuario.setSenha(Util.gerarHashSenha(this.usuario.getSenha().trim()));
+      this.usuario.setDataInclusao(new Date());
+      this.usuario.setFlagAtivo("S");
+   }
+   
+   public void navegarParaPesquisar()
+   {
+      this.usuario = new Usuario();
+      navegacaoBean.setCurrentPage("usuario-pesquisar.xhtml");
+   }
 
    public void alterar()
    {
@@ -58,7 +74,7 @@ public class UsuarioBean
          if (validarAlterar())
          {
             completarAlterar();
-            UsuarioDAO.alterar(usuario);
+            this.usuario = UsuarioDAO.alterar(usuario);
             Util.addMensagemInfo("Usuário alterado com sucesso!");
             navegarParaPesquisar();
          }
@@ -68,17 +84,7 @@ public class UsuarioBean
       {
          Util.addMensagemErro("Erro inesperado!");
          throw new JSFException(e.getMessage());
-
       }
-   }
-
-   public void completarInserir()
-   {
-      this.usuario.setNome(this.usuario.getNome().toUpperCase().trim());
-      this.usuario.setEmail(this.usuario.getEmail().toUpperCase().trim());
-      this.usuario.setSenha(Util.gerarHashSenha(this.usuario.getSenha().trim()));
-      this.usuario.setDataInclusao(new Date());
-      this.usuario.setFlagAtivo("S");
    }
 
    public void completarAlterar()
@@ -86,11 +92,28 @@ public class UsuarioBean
       this.usuario.setNome(this.usuario.getNome().toUpperCase().trim());
       this.usuario.setEmail(this.usuario.getEmail().toUpperCase().trim());
    }
-
-   public void navegarParaPesquisar()
+   
+   
+   public void navegarParaAlterarSenha()
    {
-      this.usuario = new Usuario();
-      navegacaoBean.setCurrentPage("usuario-pesquisar.xhtml");
+      navegacaoBean.setCurrentPage("usuario-alterar-senha.xhtml");
+   }
+   
+   public void alterarSenha()
+   {
+      Usuario usuarioOld = UsuarioDAO.getUsuario(this.usuario.getId());
+      if(validarSenha(usuarioOld))
+      {
+         this.usuario.setSenha(Util.gerarHashSenha(usuario.getSenha().trim()));
+         this.usuario = UsuarioDAO.alterar(this.usuario);
+         Util.addMensagemInfo("Senha alterada com sucesso!");
+         navegarParaAlterar();
+      }
+   }
+   
+   public void navegarParaAlterar()
+   {
+      navegacaoBean.setCurrentPage("usuario-alterar.xhtml");
    }
 
    public String pesquisarUsuarioPorEmail(String email)
@@ -158,7 +181,7 @@ public class UsuarioBean
       {
          this.usuario = usuario;
          this.emailOriginal = usuario.getEmail();
-         navegacaoBean.setCurrentPage("usuario-alterar.xhtml");
+         navegarParaAlterar();
       }
       catch (Exception e)
       {
@@ -280,6 +303,48 @@ public class UsuarioBean
 
       return true;
    }
+   
+   private boolean validarSenha(Usuario usuarioOld)
+   {
+      if (Util.isCampoNullOrVazio(this.senhaAtual))
+      {
+         Util.addMensagemErro("A senha atual é obrigatoria!");
+         return false;
+      }
+      
+      if (!Util.gerarHashSenha(this.senhaAtual).equals(usuarioOld.getSenha()))
+      {
+         Util.addMensagemErro("Senha inválida!");
+         return false;
+      }
+      
+      if (this.senhaAtual.equals(usuario.getSenha()))
+      {
+         Util.addMensagemErro("A nova senha deve ser diferente da atual!");
+         return false;
+      }
+      
+      if (Util.isCampoNullOrVazio(usuario.getSenha()))
+      {
+         Util.addMensagemErro("Senha obrigatória");
+         return false;
+      }
+      
+         
+      if (Util.isCampoNullOrVazio(getSenhaConfirmacao()))
+      {
+         Util.addMensagemErro("Senha confirmação obrigatória");
+         return false;
+      }
+
+      if (!usuario.getSenha().trim().equals(getSenhaConfirmacao().trim()))
+      {
+         Util.addMensagemErro("Senha de confirmação diferente");
+         return false;
+      }
+      
+      return true;
+   }
 
    public List<Usuario> getUsuarios()
    {
@@ -380,6 +445,16 @@ public class UsuarioBean
    public void setNomeUsuarioLogado(String nomeUsuarioLogado)
    {
       this.nomeUsuarioLogado = nomeUsuarioLogado;
+   }
+
+   public String getSenhaAtual()
+   {
+      return senhaAtual;
+   }
+
+   public void setSenhaAtual(String senhaAtual)
+   {
+      this.senhaAtual = senhaAtual;
    }
 
 }

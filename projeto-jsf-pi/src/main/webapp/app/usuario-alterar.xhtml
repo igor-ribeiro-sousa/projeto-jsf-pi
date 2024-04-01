@@ -30,7 +30,7 @@
 		}
 		
 		.card {
-			width: 80rem; /* Defina a largura desejada */
+			width: 80rem;
 			margin-bottom: 2em;
 		}
 		.form-container label {
@@ -112,7 +112,8 @@
 									value="#{usuarioBean.usuario.dataNascimento}"
 									placeholder="Data de nascimento" pattern="dd/MM/yyyy"
 									mask="true" yearRange="c-100:c" showButtonPanel="true"
-									navigator="true" showIcon="true" showOn="button" />
+									navigator="true" showIcon="true" showOn="button">
+								</p:calendar>
 							</div>
 						</div>
 
@@ -123,18 +124,24 @@
 								<f:selectItem itemLabel="Inativo" itemValue="N" />
 							</p:selectOneRadio>
 						</div>
-
+						
 					</div>
 
 					<div class="ui-g-12">
-						<div style="display: flex; justify-content: flex-end; gap: 10px;">
-							<p:commandButton value="Voltar"
-								actionListener="#{usuarioBean.navegarParaPesquisar}"
-								styleClass="ui-button-secondary" update="contentPanel" />
-
-							<p:commandButton value="Alterar" icon="pi pi-check"
-								action="#{usuarioBean.alterar}" update="contentPanel"
-								styleClass="ui-button-success" />
+						<div
+							style="display: flex; justify-content: space-between; align-items: center;">
+							<p:commandButton value="Alterar senha"
+								action="#{usuarioBean.navegarParaAlterarSenha}" update="contentPanel"/>
+								
+							<div style="display: flex; gap: 10px;">
+								<p:commandButton value="Voltar"
+									actionListener="#{usuarioBean.navegarParaPesquisar}"
+									styleClass="ui-button-secondary" update="contentPanel" />
+									
+								<p:commandButton value="Alterar" icon="pi pi-check"
+									action="#{usuarioBean.alterar}" update="contentPanel"
+									styleClass="ui-button-success" />
+							</div>
 						</div>
 					</div>
 
