@@ -240,8 +240,8 @@ public class UsuarioDAO
          }
       }
    }
-   
-   public static boolean recuperarSenha(String email, Date dataNascimento)
+
+   public static Usuario recuperarSenha(String email, Date dataNascimento)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       try
@@ -251,12 +251,11 @@ public class UsuarioDAO
          query.setParameter("email", email);
          query.setParameter("dataNascimento", dataNascimento);
 
-         List<Usuario> resultList = query.getResultList();
-         return !resultList.isEmpty();
+         return (Usuario) query.getSingleResult();
       }
       catch (NoResultException e)
       {
-         return false;
+         return null;
       }
       finally
       {

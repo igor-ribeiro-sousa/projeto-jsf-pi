@@ -3,11 +3,10 @@ package bean;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Random;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -16,6 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import dao.UsuarioDAO;
+import entidade.Usuario;
 import util.Util;
 
 @ManagedBean
@@ -25,16 +25,21 @@ public class RecuperarSenhaBean
    private String email;
 
    private Date dataNascimento;
+   
+   private String novaSenha;
 
    public void recuperarSenha()
    {
       this.email = this.email.toUpperCase().trim();
       if (validarRecuperarSenha())
       {
-         if (UsuarioDAO.recuperarSenha(this.email, this.dataNascimento))
+         Usuario usuario = UsuarioDAO.recuperarSenha(this.email, this.dataNascimento);
+         if (Objects.nonNull(usuario))
          {
             if (enviarEmailRecuperacaoSenha(this.email))
             {
+               usuario.setSenha(Util.gerarHashSenha(novaSenha));
+               UsuarioDAO.alterar(usuario);
                Util.addMensagemInfo("Email de recuperação de senha enviado com sucesso!");
             }
             else
@@ -42,13 +47,17 @@ public class RecuperarSenhaBean
                Util.addMensagemErro("Falha ao enviar email de recuperação de senha. Por favor, tente novamente!");
             }
          }
+         else
+         {
+            Util.addMensagemErro("Usuário não encontrado!");
+         }
       }
    }
 
    private boolean enviarEmailRecuperacaoSenha(String destinatario)
    {
-      final String remetente = "igorribeirosdev@gmail.com";
-      final String senhaRemetente = "woxs pgxc laez mwup";
+      final String remetente = "antonio.sousa09@aluno.unifametro.edu.br";
+      final String senhaRemetente = "wwgu vpaf uvre fnrq";
 
       Properties props = new Properties();
       props.put("mail.smtp.auth", "true");
@@ -73,7 +82,7 @@ public class RecuperarSenhaBean
          message.setSubject("Recuperação de Senha");
          String novaSenha = gerarNovaSenha();
          message.setText("Sua nova senha é: " + novaSenha);
-         
+
          Transport.send(message);
          System.out.println("Email enviado com sucesso!");
 
@@ -89,7 +98,11 @@ public class RecuperarSenhaBean
 
    private String gerarNovaSenha()
    {
-      return "novaSenha123456";
+      Random random = new Random();
+      int numeroAleatorio = random.nextInt(900) + 100;
+
+      this.novaSenha = Integer.toString(numeroAleatorio);
+      return this.novaSenha;
    }
 
    private boolean validarRecuperarSenha()
@@ -138,6 +151,16 @@ public class RecuperarSenhaBean
    public void setDataNascimento(Date dataNascimento)
    {
       this.dataNascimento = dataNascimento;
+   }
+
+   public String getNovaSenha()
+   {
+      return novaSenha;
+   }
+
+   public void setNovaSenha(String novaSenha)
+   {
+      this.novaSenha = novaSenha;
    }
 
 }
