@@ -24,15 +24,15 @@
 		}
 		
 		.card-container {
-			width: 100%;
 			display: flex;
 			justify-content: center;
 		}
 		
 		.card {
-			width: 80rem; /* Defina a largura desejada */
+			width: 85%;
 			margin-bottom: 2em;
 		}
+
 </style>
 </h:head>
 
@@ -47,10 +47,11 @@
 				<p:messages id="messages" showDetail="true" closable="true">
 					<p:autoUpdate />
 				</p:messages>
-				
-				<span class="ui-input-icon-left"> <i class="pi pi-search" />
+
+				<span class="ui-input-icon-left ui-md-12"> 
+				<i class="pi pi-search" style=" margin-top: 0; margin-left:8px;transform: translateY(-50%); " />
 					<p:inputText placeholder="Pesquisar usuário por nome"
-						style="width: 77rem;" value="#{usuarioBean.nomeUsuarioPesquisa}" /> 
+						style="width: 100%;" value="#{usuarioBean.nomeUsuarioPesquisa}" />
 				</span>
 
 				<p:dataTable value="#{usuarioBean.usuarios}" rows="5" var="item"

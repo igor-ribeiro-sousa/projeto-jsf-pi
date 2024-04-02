@@ -31,8 +31,7 @@
 		}
 		
 		.card {
-			width: 80rem; /* Defina a largura desejada */
-			margin-bottom: 2em;
+			width: 65rem;
 		}
 		
 		.form-container label {
@@ -91,19 +90,17 @@
 
 					<div class="ui-g">
 
-						<div class="ui-g-12">
-							<p:outputLabel value="Nome Usuário:" />
-							<span class="ui-input-icon-left"> <i class="pi pi-user" />
-								<p:inputText style="width: 77rem;" id="nome"
-									value="#{usuarioBean.usuario.nome}"
-									placeholder="Digite o nome do usuário" />
-							</span>
-						</div>
-
+						<span class="ui-input-icon-left ui-g-12">
+						<p:outputLabel value="Nome Usuário:" /> 
+						<i class="pi pi-user" style="margin-top: 8px; margin-left: 8px; transform: translateY(-50%);" />
+							<p:inputText placeholder="Digite o nome do usuário" id="sfd"
+								style="width: 100%;" value="#{usuarioBean.usuario.nome}" />
+						</span>
+						
 						<div class="ui-g-6">
 							<p:outputLabel value="Senha:" />
 							<span class="ui-input-icon-left"> <i class="pi pi-lock" />
-								<p:password style="width: 38rem;" id="senhaInput"
+								<p:password style="width: 25rem;" id="senhaInput"
 									value="#{usuarioBean.usuario.senha}"
 									placeholder="Digite sua senha" toggleMask="true" /> <i
 								class="pi" id="mostrarSenhaIcon" style="cursor: pointer;"
@@ -114,7 +111,7 @@
 						<div class="ui-g-6">
 							<p:outputLabel value="Confirmação Senha:" />
 							<span class="ui-input-icon-left"> <i class="pi pi-lock" />
-								<p:password style="width: 38rem;" id="senhaConfirmacaoInput"
+								<p:password style="width: 25rem;" id="senhaConfirmacaoInput"
 									value="#{usuarioBean.senhaConfirmacao}"
 									placeholder="Confirmar sua senha" toggleMask="true" /> <i
 								class="pi" id="mostrarSenhaConfirmacaoIcon"
@@ -122,17 +119,13 @@
 								onclick="senhaVisivel('senhaConfirmacaoInput', 'mostrarSenhaConfirmacaoIcon')" />
 							</span>
 						</div>
-
-						<div class="ui-g-12">
+						
+						<span class="ui-input-icon-left ui-g-12">
 						<p:outputLabel value="E-mail:" />
-							<div class="input-container">
-								<span class="ui-input-icon-left"> <i
-									class="pi pi-envelope" /> <p:inputText style="width: 77rem;"
-										id="email" value="#{usuarioBean.usuario.email}"
-										placeholder="Digite o endereço de e-mail" />
-								</span>
-							</div>
-						</div>
+						<i class="pi pi-envelope" style="margin-top: 8px; margin-left: 8px; transform: translateY(-50%);" />
+							<p:inputText placeholder="Digite o endereço de e-mail" id="email"
+								style="width: 100%;" value="#{usuarioBean.usuario.email}"/>
+						</span>
 
 						<div class="ui-g-4">
 						<p:outputLabel value="Data de Nascimento:" />
