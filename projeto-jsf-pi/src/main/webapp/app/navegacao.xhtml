@@ -111,7 +111,11 @@
                     actionListener="#{navegacaoBean.setCurrentPage('usuario-pesquisar.xhtml')}"
                     icon="pi pi-id-card" update="contentPanel" />
 
-                 <p:menuitem value="Logout" action="#{loginBean.logout}"
+				<p:menuitem value="Github"
+	            	url="https://github.com/igor-ribeiro-sousa/projeto-jsf-pi"
+	            	icon="pi pi-github" />
+
+				<p:menuitem value="Logout" action="#{loginBean.logout}"
                 icon="pi pi-power-off" />
             </p:megaMenu>
         </h:form>
