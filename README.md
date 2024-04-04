@@ -54,4 +54,3 @@ Certifique-se de ajustar quaisquer configurações adicionais de acordo com o se
 - Tomcat (v9)
 - Banco de dados relacional (PostgreSQL)
 
-[GitHub](https://github.com/igor-ribeiro-sousa)
