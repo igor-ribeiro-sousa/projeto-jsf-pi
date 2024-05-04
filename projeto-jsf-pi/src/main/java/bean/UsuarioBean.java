@@ -93,7 +93,6 @@ public class UsuarioBean
       this.usuario.setEmail(this.usuario.getEmail().toUpperCase().trim());
    }
    
-   
    public void navegarParaAlterarSenha()
    {
       navegacaoBean.setCurrentPage("usuario-alterar-senha.xhtml");
