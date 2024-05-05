@@ -66,7 +66,7 @@
 
             <div class="form-container">
                 <h:form id="formulario">
-                	<h2 style="text-align: center;">PROJETO INTEGRADOR - ENGENHARIA DE SOFTWARE</h2>
+                	<h2 style="text-align: center;">SISTEMA DE AGENDAMENTO</h2>
                     <div class="ui-g">
                     
                         <div class="ui-g-12">
@@ -86,16 +86,27 @@
                             </div>
                         </div>
                         
-                        <div class="ui-g-12">
+                        <div class="ui-g-6">
                             <h:commandLink value="Esqueceu a senha?" action="#{loginBean.esqueciSenha}" style="color: #007bff; text-decoration: none; font-weight: bold; font-size: 15px;"/>
                         </div>
                         
                     </div><br/>
 
-                    <div class="ui-g-12">
-                        <p:commandButton style="width: 100%" value="Entrar" icon="pi pi-check" action="#{loginBean.logar}" update="formulario" styleClass="ui-button-success"/>
-                    </div>
-                </h:form>
+					<div class="ui-g">
+						<div class="ui-g-6">
+							<p:commandButton style="width: 100%" value="Entrar"
+								icon="pi pi-check" action="#{loginBean.logar}"
+								update="formulario" styleClass="ui-button-success" />
+						</div>
+
+						<div class="ui-g-6">
+							<p:button style="width: 100%" value="Agendar"
+								icon="pi pi-calendar" outcome="agendamento.xhtml"/>
+						</div>
+
+					</div>
+
+				</h:form>
             </div>
         </p:card>
     </div>
