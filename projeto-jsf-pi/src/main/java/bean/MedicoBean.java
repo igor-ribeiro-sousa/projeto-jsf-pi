@@ -1,6 +1,7 @@
 package bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -29,6 +30,33 @@ public class MedicoBean
    public MedicoBean()
    {
       this.medico = new Medico();
+   }
+   
+   public void inserir()
+   {
+      try
+      {
+         if (validarInserir())
+         {
+            completarInserir();
+            MedicoDAO.inserir(medico);
+            Util.addMensagemInfo("Médico inserido com sucesso!");
+            navegarParaPesquisar();
+         }
+
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         throw new JSFException(e.getMessage());
+      }
+   }
+   
+   public void completarInserir()
+   {
+      this.medico.setNome(this.medico.getNome().toUpperCase().trim());
+      this.medico.setDataInclusao(new Date());
+      this.medico.setFlagAtivo("S");
    }
    
    public void editar(Medico medico)
@@ -81,9 +109,25 @@ public class MedicoBean
       }
    }
    
+   public void navegarParaPesquisar()
+   {
+      this.medico = new Medico();
+      navegacaoBean.setCurrentPage("medico-pesquisar.xhtml");
+   }
+   
    public void navegarParaAlterar()
    {
       navegacaoBean.setCurrentPage("usuario-alterar.xhtml");
+   }
+   
+   private boolean validarInserir()
+   {
+      if (Util.isCampoNullOrVazio(medico.getNome()))
+      {
+         Util.addMensagemErro("Nome do médico é obrigatório");
+         return false;
+      }
+      return true;
    }
 
    public Medico getMedico()
