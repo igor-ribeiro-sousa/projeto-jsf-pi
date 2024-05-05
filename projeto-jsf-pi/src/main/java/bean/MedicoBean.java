@@ -59,6 +59,31 @@ public class MedicoBean
       this.medico.setFlagAtivo("S");
    }
    
+   public void alterar()
+   {
+      try
+      {
+         if (validarAlterar())
+         {
+            completarAlterar();
+            this.medico = MedicoDAO.alterar(medico);
+            Util.addMensagemInfo("Médico alterado com sucesso!");
+            navegarParaPesquisar();
+         }
+
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         throw new JSFException(e.getMessage());
+      }
+   }
+
+   public void completarAlterar()
+   {
+      this.medico.setNome(this.medico.getNome().toUpperCase().trim());
+   }
+   
    public void editar(Medico medico)
    {
       try
@@ -117,10 +142,20 @@ public class MedicoBean
    
    public void navegarParaAlterar()
    {
-      navegacaoBean.setCurrentPage("usuario-alterar.xhtml");
+      navegacaoBean.setCurrentPage("medico-alterar.xhtml");
    }
    
    private boolean validarInserir()
+   {
+      if (Util.isCampoNullOrVazio(medico.getNome()))
+      {
+         Util.addMensagemErro("Nome do médico é obrigatório");
+         return false;
+      }
+      return true;
+   }
+   
+   private boolean validarAlterar()
    {
       if (Util.isCampoNullOrVazio(medico.getNome()))
       {

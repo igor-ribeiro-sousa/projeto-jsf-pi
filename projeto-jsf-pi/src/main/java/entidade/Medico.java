@@ -26,9 +26,6 @@ public class Medico
    @Column(name = "NM_PCT")
    private String nome;
 
-   @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL)
-   private List<Agendamento> agendamentos;
-
    @Column(name = "FG_ATV")
    private String flagAtivo;
 
@@ -54,16 +51,6 @@ public class Medico
    public void setNome(String nome)
    {
       this.nome = nome;
-   }
-
-   public List<Agendamento> getAgendamentos()
-   {
-      return agendamentos;
-   }
-
-   public void setAgendamentos(List<Agendamento> agendamentos)
-   {
-      this.agendamentos = agendamentos;
    }
 
    public String getFlagAtivo()

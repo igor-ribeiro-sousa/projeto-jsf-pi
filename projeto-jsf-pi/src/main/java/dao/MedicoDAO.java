@@ -65,13 +65,13 @@ public class MedicoDAO
       }
    }
 
-   public static Usuario getMedico(Integer id)
+   public static Medico getMedico(Integer id)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
       try
       {
-         return entityManager.find(Usuario.class, id);
+         return entityManager.find(Medico.class, id);
 
       }
       catch (Exception e)
@@ -168,6 +168,7 @@ public class MedicoDAO
          Medico medico = entityManager.find(Medico.class, id);
          if (medico != null)
          {
+            medico = entityManager.merge(medico);
             excluir(medico, entityManager);
          }
          transaction.commit();

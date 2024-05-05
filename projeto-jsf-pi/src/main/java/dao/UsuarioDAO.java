@@ -276,6 +276,7 @@ public class UsuarioDAO
          Usuario usuario = entityManager.find(Usuario.class, id);
          if (usuario != null)
          {
+            usuario = entityManager.merge(usuario);
             excluir(usuario, entityManager);
          }
          transaction.commit();

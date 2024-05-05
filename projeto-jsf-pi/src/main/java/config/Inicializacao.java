@@ -22,20 +22,17 @@ public class Inicializacao implements ServletContextListener
       try
       {
          System.out.println("Inserindo um usuário...");
-         
          UsuarioDAO.inserir(setUsuario(null, "SEU ZEZINHO", "IGORRIBEIROCONS@GMAIL.COM", "123", new Date(),
                new SimpleDateFormat("dd/MM/yyyy").parse("17/08/1996"), "S"));
-         
          System.out.println("Usuário inserido com sucesso.");
 
-         System.out.println("Inserindo médicoS...");
          
+         System.out.println("Inserindo médicoS...");
          MedicoDAO.inserir(setMedico(null, "DR RITA DE CASSIA", "S", new Date()));
          MedicoDAO.inserir(setMedico(null, "DR CARLOS EDUARDO", "S", new Date()));
-         MedicoDAO.inserir(setMedico(null, "DR IRANILDO MESQUITA", "S", new Date()));
-         
-         System.out.println("Médico inserido com sucesso.");
+         System.out.println("Médicos inseridos com sucesso.");
 
+         
          System.out.println("Script SQL executado com sucesso.");
 
       }
