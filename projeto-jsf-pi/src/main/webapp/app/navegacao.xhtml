@@ -107,7 +107,11 @@
                 <p:menuitem value="Home" actionListener="#{navegacaoBean.setCurrentPage('home.xhtml')}"
                     icon="pi pi-home" update="contentPanel" />
 
-                <p:menuitem value="Usuario"
+				<p:menuitem value="Médico"
+                    actionListener="#{navegacaoBean.setCurrentPage('medico-pesquisar.xhtml')}"
+                    icon="pi pi-heart" update="contentPanel" />
+
+                <p:menuitem value="Usuário"
                     actionListener="#{navegacaoBean.setCurrentPage('usuario-pesquisar.xhtml')}"
                     icon="pi pi-id-card" update="contentPanel" />
 

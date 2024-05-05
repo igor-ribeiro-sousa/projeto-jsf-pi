@@ -14,7 +14,6 @@ import enuns.StatusAgendamento;
 @SessionScoped
 public class AgendamentoBean
 {
-
    private Agendamento agendamento;
 
    public AgendamentoBean()
