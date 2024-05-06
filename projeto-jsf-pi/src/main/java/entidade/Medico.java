@@ -1,29 +1,26 @@
 package entidade;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "TBL_AGD")
+@Table(name = "TBL_MDC")
 public class Medico
 {
    @Id
-   @Column(name = "CD_AGD")
+   @Column(name = "CD_MDC")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @Column(name = "NM_PCT")
+   @Column(name = "NM_MDC")
    private String nome;
 
    @Column(name = "FG_ATV")

@@ -6,12 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import entidade.Agendamento;
 import entidade.Medico;
 import entidade.Usuario;
 import exception.JSFException;
 import util.JPAUtilService;
 
-public class MedicoDAO
+public class AgendamentoDAO
 {
 
    public static List<Medico> pesquisar()
@@ -65,7 +66,7 @@ public class MedicoDAO
       }
    }
 
-   public static void inserir(Medico medico)
+   public static void inserir(Agendamento agendamento)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       EntityTransaction transaction = entityManager.getTransaction();
@@ -73,7 +74,7 @@ public class MedicoDAO
       try
       {
          transaction.begin();
-         inserir(medico, entityManager);
+         inserir(agendamento, entityManager);
          transaction.commit();
 
       }
@@ -94,12 +95,38 @@ public class MedicoDAO
       }
    }
 
-   private static void inserir(Medico medico, EntityManager entityManager)
+   private static void inserir(Agendamento agendamento, EntityManager entityManager)
    {
-      entityManager.persist(medico);
+      entityManager.persist(agendamento);
    }
 
-   public static Medico alterar(Medico medico)
+   public static boolean existePacientePorEmail(String email)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+
+      try
+      {
+         Query query = entityManager.createQuery("SELECT u FROM Agendamento u WHERE u.emailPaciente = :email");
+         query.setParameter("email", email);
+
+         List<Agendamento> resultados = query.getResultList();
+         return !resultados.isEmpty();
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+   }
+
+   public static Agendamento alterar(Agendamento agendamento)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       EntityTransaction transaction = entityManager.getTransaction();
@@ -107,9 +134,9 @@ public class MedicoDAO
       try
       {
          transaction.begin();
-         medico = alterar(medico, entityManager);
+         agendamento = alterar(agendamento, entityManager);
          transaction.commit();
-         return medico;
+         return agendamento;
       }
       catch (Exception e)
       {
@@ -128,11 +155,10 @@ public class MedicoDAO
       }
    }
 
-   private static Medico alterar(Medico medico, EntityManager entityManager)
+   private static Agendamento alterar(Agendamento agendamento, EntityManager entityManager)
    {
-      return entityManager.merge(medico);
+      return entityManager.merge(agendamento);
    }
-
 
    public static void excluir(Integer id)
    {
@@ -142,11 +168,11 @@ public class MedicoDAO
       try
       {
          transaction.begin();
-         Medico medico = entityManager.find(Medico.class, id);
-         if (medico != null)
+         Agendamento agendamento = entityManager.find(Agendamento.class, id);
+         if (agendamento != null)
          {
-            medico = entityManager.merge(medico);
-            excluir(medico, entityManager);
+            agendamento = entityManager.merge(agendamento);
+            excluir(agendamento, entityManager);
          }
          transaction.commit();
 
@@ -157,8 +183,7 @@ public class MedicoDAO
          {
             transaction.rollback();
          }
-         throw new JSFException("Erro ao excluir a médico: " + e.getMessage());
-
+         throw new JSFException("Erro ao excluir a agendamento: " + e.getMessage());
       }
       finally
       {
@@ -169,8 +194,8 @@ public class MedicoDAO
       }
    }
 
-   private static void excluir(Medico medico, EntityManager entityManager)
+   private static void excluir(Agendamento agendamento, EntityManager entityManager)
    {
-      entityManager.remove(medico);
+      entityManager.remove(agendamento);
    }
 }

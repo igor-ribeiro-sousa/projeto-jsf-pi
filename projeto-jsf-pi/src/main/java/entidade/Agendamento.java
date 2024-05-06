@@ -8,8 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,11 +27,10 @@ public class Agendamento
    @Column(name = "NM_PCT")
    private String nomePaciente;
 
-   @ManyToOne
-   @JoinColumn(name = "medico_id")
-   private Medico medico;
+   @Column(name = "NM_MDC")
+   private String nomeMedico;
 
-   @Column(name = "EM_PCT", unique = true)
+   @Column(name = "EM_PCT")
    private String emailPaciente;
 
    @Column(name = "ST_AGD")
@@ -71,14 +68,14 @@ public class Agendamento
       this.nomePaciente = nomePaciente;
    }
 
-   public Medico getMedico()
+   public String getNomeMedico()
    {
-      return medico;
+      return nomeMedico;
    }
 
-   public void setMedico(Medico medico)
+   public void setNomeMedico(String nomeMedico)
    {
-      this.medico = medico;
+      this.nomeMedico = nomeMedico;
    }
 
    public String getEmailPaciente()
