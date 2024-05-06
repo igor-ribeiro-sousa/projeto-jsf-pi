@@ -47,8 +47,8 @@ public class UsuarioBean
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());
+         Util.addMensagemErro("Erro ao tentar inserir o usuário. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar inserir o usuário.", e);
       }
    }
    
@@ -82,8 +82,8 @@ public class UsuarioBean
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());
+         Util.addMensagemErro("Erro ao tentar alterar o usuário. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar alterar o usuário.", e);
       }
    }
 
@@ -136,11 +136,6 @@ public class UsuarioBean
 
    public boolean existeUsuarioPorEmail(String email)
    {
-      if (Util.isCampoNullOrVazio(email))
-      {
-         return false;
-      }
-
       try
       {
          return UsuarioDAO.existeUsuarioPorEmail(email.toUpperCase().trim());
@@ -169,8 +164,8 @@ public class UsuarioBean
       }
       catch (JSFException e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());      
+         Util.addMensagemErro("Erro ao tentar pesquisar o usuário");
+         throw new JSFException("Erro ao tentar pesquisar o usuário", e);      
       }
    }
 
@@ -194,12 +189,13 @@ public class UsuarioBean
       try
       {
          UsuarioDAO.excluir(id);
-         Util.addMensagemWarn("Usuário excluído!");
+         Util.addMensagemWarn("Usuário excluído !");
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());        }
+         Util.addMensagemErro("Erro ao tentar exluir usuário. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar exluir usuário", e);        
+      }
 
    }
 
