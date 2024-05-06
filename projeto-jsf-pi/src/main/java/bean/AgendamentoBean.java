@@ -50,7 +50,7 @@ public class AgendamentoBean
          {
             completarInserir();
             AgendamentoDAO.inserir(agendamento);
-            Util.addMensagemInfo("Agendamento realizado com sucesso!");
+            Util.addMensagemInfo("Agendamento realizado com sucesso!. Número do agendamento: " + this.agendamento.getId());
             atualizaAgendamento();
             return "index";
          }
