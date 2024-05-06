@@ -15,20 +15,20 @@ import util.JPAUtilService;
 public class AgendamentoDAO
 {
 
-   public static List<Medico> pesquisar()
+   public static List<Agendamento> pesquisar()
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
       try
       {
-         Query query = entityManager.createQuery("select j from Medico j");
-         List<Medico> resutado = query.getResultList();
+         Query query = entityManager.createQuery("select j from Agendamento j");
+         List<Agendamento> resutado = query.getResultList();
          return resutado;
 
       }
       catch (Exception e)
       {
-         throw new JSFException("Erro ao pesquisar médicos: " + e.getMessage());
+         throw new JSFException("Erro ao pesquisar agendamento: " + e.getMessage());
 
       }
       finally
@@ -40,17 +40,16 @@ public class AgendamentoDAO
       }
    }
 
-   public static List<Medico> pesquisarPorMedico(String nomeMedico)
+   public static List<Agendamento> pesquisarPorMedico(String nomeMedico)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Medico u WHERE " + "(u.nome LIKE :nomeMedico)");
-
+         Query query = entityManager.createQuery("SELECT a FROM Agendamento a WHERE a.medico.nome LIKE :nomeMedico");
          query.setParameter("nomeMedico", "%" + nomeMedico + "%");
 
-         List<Medico> resultado = query.getResultList();
+         List<Agendamento> resultado = query.getResultList();
          return resultado;
       }
       catch (Exception e)

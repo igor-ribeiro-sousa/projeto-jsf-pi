@@ -56,7 +56,7 @@
 
 				<p:dataTable value="#{usuarioBean.usuarios}" rows="5" var="item"
 					emptyMessage="Nenhum usuário" style="text-align: center;"
-					paginator="false"
+					paginator="true"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} resultados"
 					rowsPerPageTemplate="5,10">

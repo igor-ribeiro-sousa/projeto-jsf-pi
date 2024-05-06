@@ -23,12 +23,19 @@ import util.Util;
 public class AgendamentoBean
 {
    private Agendamento agendamento;
+   private String nomeMedicoPesquisa;
    private List<Medico> medicosCadastrados;
+   private List<Agendamento> agendamentos;
+   private List<Agendamento> listaResultado;
+   
+   private boolean exibirResultadosPesquisa = false;
 
    public AgendamentoBean()
    {
       this.agendamento = new Agendamento();
       this.agendamento.setMedico(new Medico());
+      this.agendamentos = new ArrayList<Agendamento>();
+      this.listaResultado = new ArrayList<Agendamento>();
    }
 
    public List<SelectItem> getClinicas()
@@ -86,6 +93,28 @@ public class AgendamentoBean
       {
          this.agendamento.setCodigoMedico(medicos.get(0).getId());
          this.agendamento.setMedico(null);
+      }
+   }
+   
+   public void pesquisarPorNome()
+   {
+      try
+      {
+         if (!Util.isCampoNullOrVazio(nomeMedicoPesquisa))
+         {
+            this.listaResultado = AgendamentoDAO.pesquisarPorMedico(this.nomeMedicoPesquisa.toUpperCase().trim());
+            this.exibirResultadosPesquisa = true;
+         }
+         else
+         {
+            this.listaResultado = AgendamentoDAO.pesquisar();
+         }
+
+      }
+      catch (JSFException e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         throw new JSFException(e.getMessage());      
       }
    }
 
@@ -177,6 +206,16 @@ public class AgendamentoBean
    {
       this.agendamento = agendamento;
    }
+   
+   public String getNomeMedicoPesquisa()
+   {
+      return nomeMedicoPesquisa;
+   }
+
+   public void setNomeMedicoPesquisa(String nomeMedicoPesquisa)
+   {
+      this.nomeMedicoPesquisa = nomeMedicoPesquisa;
+   }
 
    public List<Medico> getMedicosCadastrados()
    {
@@ -184,4 +223,44 @@ public class AgendamentoBean
       return medicosCadastrados;
    }
 
+   public List<Agendamento> getAgendamentos()
+   {
+      if (exibirResultadosPesquisa)
+      {
+         return this.listaResultado;
+      }
+      else
+      {
+         if (agendamentos != null)
+         {
+            agendamentos = AgendamentoDAO.pesquisar();
+         }
+         return agendamentos;
+      }
+   }
+
+   public void setAgendamentos(List<Agendamento> agendamentos)
+   {
+      this.agendamentos = agendamentos;
+   }
+
+   public List<Agendamento> getListaResultado()
+   {
+      return listaResultado;
+   }
+
+   public void setListaResultado(List<Agendamento> listaResultado)
+   {
+      this.listaResultado = listaResultado;
+   }
+
+   public boolean isExibirResultadosPesquisa()
+   {
+      return exibirResultadosPesquisa;
+   }
+
+   public void setExibirResultadosPesquisa(boolean exibirResultadosPesquisa)
+   {
+      this.exibirResultadosPesquisa = exibirResultadosPesquisa;
+   }
 }
