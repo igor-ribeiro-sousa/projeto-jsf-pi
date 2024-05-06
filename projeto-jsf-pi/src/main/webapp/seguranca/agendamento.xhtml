@@ -115,13 +115,11 @@
 						</div>
 
 						<div class="ui-g-12">
-							<p:outputLabel for="clinica" value="Clínica:" />
-							<p:selectOneMenu id="clinica" style="width: 38rem;"
-								value="#{agendamentoBean.agendamento.clinica}">
-								<f:selectItem itemValue="Clinica A" itemLabel="Clínica A" />
-								<f:selectItem itemValue="Clinica B" itemLabel="Clínica B" />
-								<f:selectItem itemValue="Clinica C" itemLabel="Clínica C" />
-							</p:selectOneMenu>
+						    <p:outputLabel for="clinica" value="Clínica:" />
+						    <p:selectOneMenu id="clinica" style="width: 38rem;"
+						                     value="#{agendamentoBean.agendamento.clinica}">
+						        <f:selectItems value="#{agendamentoBean.clinicas}" />
+						    </p:selectOneMenu>
 						</div>
 						
 						<div class="ui-g-12">

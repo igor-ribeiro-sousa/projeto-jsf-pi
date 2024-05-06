@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,7 +9,6 @@ import javax.persistence.Query;
 
 import entidade.Agendamento;
 import entidade.Medico;
-import entidade.Usuario;
 import exception.JSFException;
 import util.JPAUtilService;
 
@@ -111,6 +111,31 @@ public class AgendamentoDAO
 
          List<Agendamento> resultados = query.getResultList();
          return !resultados.isEmpty();
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+   }
+   
+   public static boolean existeAgendamentonaMesmaData(Date dataAgendamento)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+
+      try
+      {
+         Query query = entityManager.createQuery("SELECT COUNT(a) FROM Agendamento a WHERE a.dataHoraAgendamento = :dataAgendamento");
+         query.setParameter("dataAgendamento", dataAgendamento);
+         Long count = (Long) query.getSingleResult();
+         return count > 0;
       }
       catch (Exception e)
       {

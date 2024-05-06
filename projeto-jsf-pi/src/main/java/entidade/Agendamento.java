@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import enuns.Clinica;
 import enuns.StatusAgendamento;
 
 @Entity
@@ -38,7 +39,8 @@ public class Agendamento
    private StatusAgendamento status;
 
    @Column(name = "NM_CLN")
-   private String clinica;
+   @Enumerated(EnumType.STRING)
+   private Clinica clinica;
 
    @Column(name = "DT_AGD")
    @Temporal(TemporalType.TIMESTAMP)
@@ -98,12 +100,12 @@ public class Agendamento
       this.status = status;
    }
 
-   public String getClinica()
+   public Clinica getClinica()
    {
       return clinica;
    }
 
-   public void setClinica(String clinica)
+   public void setClinica(Clinica clinica)
    {
       this.clinica = clinica;
    }
@@ -127,5 +129,6 @@ public class Agendamento
    {
       this.dataInclusao = dataInclusao;
    }
+   
 
 }

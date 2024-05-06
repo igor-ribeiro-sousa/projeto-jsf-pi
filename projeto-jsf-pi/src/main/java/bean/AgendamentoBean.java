@@ -13,6 +13,7 @@ import dao.AgendamentoDAO;
 import dao.MedicoDAO;
 import entidade.Agendamento;
 import entidade.Medico;
+import enuns.Clinica;
 import enuns.StatusAgendamento;
 import exception.JSFException;
 import util.Util;
@@ -29,14 +30,15 @@ public class AgendamentoBean
       this.agendamento = new Agendamento();
    }
 
-   public List<SelectItem> getStatus()
+   public List<SelectItem> getClinicas()
    {
-      List<SelectItem> status = new ArrayList<>();
-      for (StatusAgendamento item : StatusAgendamento.values())
+      List<SelectItem> clinica = new ArrayList<>();
+      for (Clinica item : Clinica.values())
       {
-         status.add(new SelectItem(item, item.name()));
+         String label = item.name().replace("_", " ");
+         clinica.add(new SelectItem(item, label));
       }
-      return status;
+      return clinica;
    }
 
    public String agendar()
@@ -48,6 +50,7 @@ public class AgendamentoBean
             completarInserir();
             AgendamentoDAO.inserir(agendamento);
             Util.addMensagemInfo("Agendamento realizado com sucesso!");
+            this.agendamento = new Agendamento();
             return "index";
          }
 
@@ -64,7 +67,6 @@ public class AgendamentoBean
    {
       this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
       this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
-      this.agendamento.setClinica(this.agendamento.getClinica().toUpperCase().trim());
       this.agendamento.setNomeMedico(this.agendamento.getNomeMedico().toUpperCase().trim());
       this.agendamento.setDataInclusao(new Date());
       this.agendamento.setStatus(StatusAgendamento.AGENDADO);
@@ -77,14 +79,22 @@ public class AgendamentoBean
    
    public boolean existePacientePorEmail(String email)
    {
-      if (Util.isCampoNullOrVazio(email))
-      {
-         return false;
-      }
-
       try
       {
          return AgendamentoDAO.existePacientePorEmail(email.toUpperCase().trim());
+      }
+      catch (JSFException e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         return false;
+      }
+   }
+   
+   private boolean verificarDisponibilidadeAgendamento(Date dataHoraAgendamento)
+   {
+      try 
+      {
+         return AgendamentoDAO.existeAgendamentonaMesmaData(dataHoraAgendamento);
       }
       catch (JSFException e)
       {
@@ -128,6 +138,18 @@ public class AgendamentoBean
       if (Objects.isNull(agendamento.getNomeMedico()))
       {
          Util.addMensagemErro("Nome do médico obrigatório");
+         return false;
+      }
+      
+      if (Objects.isNull(agendamento.getDataHoraAgendamento()))
+      {
+         Util.addMensagemErro("Data do agendamento obrigatória");
+         return false;
+      }
+      
+      if (verificarDisponibilidadeAgendamento(agendamento.getDataHoraAgendamento())) 
+      {
+         Util.addMensagemErro("Data do agendamento indisponivel");
          return false;
       }
 
