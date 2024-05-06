@@ -125,15 +125,17 @@ public class AgendamentoDAO
          }
       }
    }
-   
-   public static boolean existeAgendamentonaMesmaData(Date dataAgendamento)
+
+   public static boolean existeAgendamentoNaMesmaData(Date dataAgendamento, String nomeMedico)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
       try
       {
-         Query query = entityManager.createQuery("SELECT COUNT(a) FROM Agendamento a WHERE a.dataHoraAgendamento = :dataAgendamento");
+         Query query = entityManager.createQuery(
+               "SELECT COUNT(a) FROM Agendamento a INNER JOIN a.medico m WHERE a.dataHoraAgendamento = :dataAgendamento AND m.nome = :nomeMedico");
          query.setParameter("dataAgendamento", dataAgendamento);
+         query.setParameter("nomeMedico", nomeMedico);
          Long count = (Long) query.getSingleResult();
          return count > 0;
       }

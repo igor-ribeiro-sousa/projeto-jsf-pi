@@ -28,6 +28,7 @@ public class AgendamentoBean
    public AgendamentoBean()
    {
       this.agendamento = new Agendamento();
+      this.agendamento.setMedico(new Medico());
    }
 
    public List<SelectItem> getClinicas()
@@ -50,33 +51,44 @@ public class AgendamentoBean
             completarInserir();
             AgendamentoDAO.inserir(agendamento);
             Util.addMensagemInfo("Agendamento realizado com sucesso!");
-            this.agendamento = new Agendamento();
+            atualizaAgendamento();
             return "index";
          }
 
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());
+         Util.addMensagemErro("Erro ao tentar agendar o exame. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar agendar o exame.", e);
       }
       return null;
    }
    
+   private void atualizaAgendamento()
+   {
+      this.agendamento = new Agendamento();
+      this.agendamento.setMedico(new Medico());      
+   }
+
    public void completarInserir()
    {
       this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
       this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
-      this.agendamento.setNomeMedico(this.agendamento.getNomeMedico().toUpperCase().trim());
+      completarMedico();
       this.agendamento.setDataInclusao(new Date());
       this.agendamento.setStatus(StatusAgendamento.AGENDADO);
    }
-
-   public Agendamento getAgendamento()
-   {
-      return agendamento;
-   }
    
+   private void completarMedico() 
+   {
+      List<Medico> medicos = MedicoDAO.pesquisarPorMedico(this.agendamento.getMedico().getNome().toUpperCase().trim());
+      if (!medicos.isEmpty()) 
+      {
+         this.agendamento.setCodigoMedico(medicos.get(0).getId());
+         this.agendamento.setMedico(null);
+      }
+   }
+
    public boolean existePacientePorEmail(String email)
    {
       try
@@ -85,7 +97,7 @@ public class AgendamentoBean
       }
       catch (JSFException e)
       {
-         Util.addMensagemErro("Erro inesperado!");
+         Util.addMensagemErro("Erro ao verificar a existência do paciente. Por favor, tente novamente mais tarde.");
          return false;
       }
    }
@@ -94,11 +106,11 @@ public class AgendamentoBean
    {
       try 
       {
-         return AgendamentoDAO.existeAgendamentonaMesmaData(dataHoraAgendamento);
+         return AgendamentoDAO.existeAgendamentoNaMesmaData(dataHoraAgendamento, this.agendamento.getMedico().getNome());
       }
       catch (JSFException e)
       {
-         Util.addMensagemErro("Erro inesperado!");
+         Util.addMensagemErro("Erro ao verificar a disponibilidade do agendamento. Por favor, tente novamente mais tarde.");
          return false;
       }
    }
@@ -107,59 +119,58 @@ public class AgendamentoBean
    {
       if (Util.isCampoNullOrVazio(agendamento.getNomePaciente()))
       {
-         Util.addMensagemErro("Nome do paciente obrigatório");
+         Util.addMensagemErro("Nome do paciente obrigatório.");
          return false;
       }
 
       if (Util.isCampoNullOrVazio(agendamento.getEmailPaciente()))
       {
-         Util.addMensagemErro("E-mail obrigatório");
+         Util.addMensagemErro("E-mail obrigatório.");
          return false;
       }
 
       if (!Util.validarEmail(agendamento.getEmailPaciente().trim()))
       {
-         Util.addMensagemErro("E-mail inválido");
-         return false;
-      }
-
-      if (existePacientePorEmail(agendamento.getEmailPaciente().trim()))
-      {
-         Util.addMensagemErro("E-mail já cadastrado");
+         Util.addMensagemErro("E-mail inválido.");
          return false;
       }
 
       if (Objects.isNull(agendamento.getClinica()))
       {
-         Util.addMensagemErro("Nome da clínica obrigatório");
+         Util.addMensagemErro("Nome da clínica obrigatório.");
          return false;
       }
       
-      if (Objects.isNull(agendamento.getNomeMedico()))
+      if (Objects.isNull(agendamento.getMedico().getNome()))
       {
-         Util.addMensagemErro("Nome do médico obrigatório");
+         Util.addMensagemErro("Nome do médico obrigatório.");
          return false;
       }
       
       if (Objects.isNull(agendamento.getDataHoraAgendamento()))
       {
-         Util.addMensagemErro("Data do agendamento obrigatória");
+         Util.addMensagemErro("Data do agendamento obrigatória.");
          return false;
       }
       
       if (verificarDisponibilidadeAgendamento(agendamento.getDataHoraAgendamento())) 
       {
-         Util.addMensagemErro("Data do agendamento indisponivel");
+         Util.addMensagemErro("Data do agendamento indisponível.");
          return false;
       }
 
       if (agendamento.getDataHoraAgendamento().before(new Date()))
       {
-         Util.addMensagemErro("Data do agendamento não pode ser no passado");
+         Util.addMensagemErro("Data do agendamento não pode ser no passado.");
          return false;
       }
 
       return true;
+   }
+   
+   public Agendamento getAgendamento()
+   {
+      return agendamento;
    }
 
    public void setAgendamento(Agendamento agendamento)

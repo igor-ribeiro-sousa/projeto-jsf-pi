@@ -124,7 +124,7 @@
 						
 						<div class="ui-g-12">
 							<p:selectOneMenu id="medico" style="width: 38rem;"
-							                 value="#{agendamentoBean.agendamento.nomeMedico}">
+							                 value="#{agendamentoBean.agendamento.medico.nome}">
 							    <f:selectItems value="#{agendamentoBean.medicosCadastrados}"
 							                   var="medico" itemValue="#{medico.nome}" itemLabel="#{medico.nome}" />
 							</p:selectOneMenu>
