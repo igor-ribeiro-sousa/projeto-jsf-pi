@@ -65,7 +65,7 @@ public class MedicoDAO
       }
    }
 
-   public static void inserir(Medico medico)
+   public static Medico inserir(Medico medico)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       EntityTransaction transaction = entityManager.getTransaction();
@@ -73,8 +73,9 @@ public class MedicoDAO
       try
       {
          transaction.begin();
-         inserir(medico, entityManager);
+         medico = inserir(medico, entityManager);
          transaction.commit();
+         return medico;
 
       }
       catch (Exception e)
@@ -94,9 +95,10 @@ public class MedicoDAO
       }
    }
 
-   private static void inserir(Medico medico, EntityManager entityManager)
+   private static Medico inserir(Medico medico, EntityManager entityManager)
    {
       entityManager.persist(medico);
+      return medico;
    }
 
    public static Medico alterar(Medico medico)

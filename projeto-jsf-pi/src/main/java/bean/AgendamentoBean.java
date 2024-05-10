@@ -1,14 +1,22 @@
 package bean;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import dao.AgendamentoDAO;
 import dao.MedicoDAO;
@@ -86,6 +94,28 @@ public class AgendamentoBean
       }
    }
    
+   public void navegarParaPesquisar()
+   {
+      this.agendamento = new Agendamento();
+      this.agendamento.setMedico(new Medico());      
+      navegacaoBean.setCurrentPage("agendamento-pesquisar.xhtml");
+   }
+   
+   private void atualizaAgendamento()
+   {
+      this.agendamento = new Agendamento();
+      this.agendamento.setMedico(new Medico());      
+   }
+
+   public void completarInserir()
+   {
+      this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
+      this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
+      completarMedico();
+      this.agendamento.setDataInclusao(new Date());
+      this.agendamento.setStatus(StatusAgendamento.AGENDADO);
+   }
+   
    public void alterar()
    {
       try
@@ -110,29 +140,8 @@ public class AgendamentoBean
    {
       this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
       this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
-      completarMedico();
-   }
-   
-   public void navegarParaPesquisar()
-   {
-      this.agendamento = new Agendamento();
-      this.agendamento.setMedico(new Medico());      
-      navegacaoBean.setCurrentPage("agendamento-pesquisar.xhtml");
-   }
-   
-   private void atualizaAgendamento()
-   {
-      this.agendamento = new Agendamento();
-      this.agendamento.setMedico(new Medico());      
-   }
-
-   public void completarInserir()
-   {
-      this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
-      this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
-      completarMedico();
-      this.agendamento.setDataInclusao(new Date());
       this.agendamento.setStatus(StatusAgendamento.AGENDADO);
+      completarMedico();
    }
    
    private void completarMedico() 
@@ -227,12 +236,58 @@ public class AgendamentoBean
       {
          agendamento.setStatus(StatusAgendamento.CANCELADO);
          AgendamentoDAO.alterar(agendamento);
+         new Thread(() -> enviarEmailCancelamento(agendamento)).start();
          Util.addMensagemWarn("Agendamento cancelado com sucesso!");
       }
       catch (Exception e)
       {
          Util.addMensagemErro("Erro ao tentar cancelar agendamento. Por favor, tente novamente mais tarde.");
          throw new JSFException("Erro ao tentar cancelar agendamento", e);        
+      }
+   }
+   
+   private boolean enviarEmailCancelamento(Agendamento agendamento)
+   {
+      final String remetente = "antonio.sousa09@aluno.unifametro.edu.br";
+      final String senhaRemetente = "wwgu vpaf uvre fnrq";
+
+      Properties props = new Properties();
+      props.put("mail.smtp.auth", "true");
+      props.put("mail.smtp.starttls.enable", "true");
+      props.put("mail.smtp.host", "smtp.gmail.com");
+      props.put("mail.smtp.port", "587");
+
+      Session session = Session.getInstance(props, new javax.mail.Authenticator()
+      {
+         protected javax.mail.PasswordAuthentication getPasswordAuthentication()
+         {
+            return new javax.mail.PasswordAuthentication(remetente, senhaRemetente);
+         }
+      });
+      
+      try
+      {
+         Message message = new MimeMessage(session);
+         message.setFrom(new InternetAddress(remetente));
+         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(agendamento.getEmailPaciente()));
+         message.setSubject("Cancelamento de agendamento");
+         String corpoEmail = "OLÁ SR./SRA. " + agendamento.getNomePaciente() + ",\n\n"
+               + "SEU AGENDAMENTO DE NÚMERO " + agendamento.getId() + "\n"
+               + "NA CLÍNICA: " + agendamento.getClinica() + "\n"
+               + "PARA O DIA " + new SimpleDateFormat("dd/MM/yyyy").format(agendamento.getDataHoraAgendamento()) + "\n"
+               + "ÀS " + new SimpleDateFormat("HH:mm").format(agendamento.getDataHoraAgendamento()) + " HORAS\n"
+               + "FOI CANCELADO.";
+
+         message.setText(corpoEmail);
+
+         Transport.send(message);
+         return true;
+      }
+      catch (MessagingException e)
+      {
+         e.printStackTrace();
+         System.err.println("Erro ao enviar o email: " + e.getMessage());
+         return false;
       }
    }
    
@@ -398,6 +453,14 @@ public class AgendamentoBean
          if (agendamentos != null)
          {
             agendamentos = AgendamentoDAO.pesquisar();
+         }
+         for (Agendamento item : agendamentos) 
+         {
+            if (item.getDataHoraAgendamento().before(new Date()) && item.getStatus().equals(StatusAgendamento.AGENDADO)) 
+            {
+               item.setStatus(StatusAgendamento.REALIZADO);
+               AgendamentoDAO.alterar(item);
+            }
          }
          return agendamentos;
       }
