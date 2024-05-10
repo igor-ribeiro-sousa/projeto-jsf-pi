@@ -27,8 +27,7 @@ public class AgendamentoBean
    private List<Medico> medicosCadastrados;
    private List<Agendamento> agendamentos;
    private List<Agendamento> listaResultado;
-   
-   private boolean exibirResultadosPesquisa = false;
+   private boolean exibirResultadosPesquisa;
 
    public AgendamentoBean()
    {
@@ -36,17 +35,7 @@ public class AgendamentoBean
       this.agendamento.setMedico(new Medico());
       this.agendamentos = new ArrayList<Agendamento>();
       this.listaResultado = new ArrayList<Agendamento>();
-   }
-
-   public List<SelectItem> getClinicas()
-   {
-      List<SelectItem> clinica = new ArrayList<>();
-      for (Clinica item : Clinica.values())
-      {
-         String label = item.name().replace("_", " ");
-         clinica.add(new SelectItem(item, label));
-      }
-      return clinica;
+      this.exibirResultadosPesquisa = false;
    }
 
    public String agendar()
@@ -113,8 +102,8 @@ public class AgendamentoBean
       }
       catch (JSFException e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());      
+         Util.addMensagemErro("Erro ao pesquisar!. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao pesquisar!.", e);      
       }
    }
 
@@ -142,6 +131,17 @@ public class AgendamentoBean
          Util.addMensagemErro("Erro ao verificar a disponibilidade do agendamento. Por favor, tente novamente mais tarde.");
          return false;
       }
+   }
+   
+   public List<SelectItem> getClinicas()
+   {
+      List<SelectItem> clinica = new ArrayList<>();
+      for (Clinica item : Clinica.values())
+      {
+         String label = item.name().replace("_", " ");
+         clinica.add(new SelectItem(item, label));
+      }
+      return clinica;
    }
    
    private boolean validarInserir()

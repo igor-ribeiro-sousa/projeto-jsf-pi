@@ -21,7 +21,7 @@ import util.Util;
 
 @ManagedBean
 @SessionScoped
-public class HomeBean
+public class DownloadBean
 {
 
    public void download() throws IOException, DocumentException

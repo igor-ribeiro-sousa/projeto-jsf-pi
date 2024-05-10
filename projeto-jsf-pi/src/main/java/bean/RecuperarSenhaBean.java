@@ -23,9 +23,7 @@ import util.Util;
 public class RecuperarSenhaBean
 {
    private String email;
-
    private Date dataNascimento;
-   
    private String novaSenha;
 
    public void recuperarSenha()
@@ -65,7 +63,6 @@ public class RecuperarSenhaBean
       props.put("mail.smtp.host", "smtp.gmail.com");
       props.put("mail.smtp.port", "587");
 
-      // Autenticação do remetente
       Session session = Session.getInstance(props, new javax.mail.Authenticator()
       {
          protected javax.mail.PasswordAuthentication getPasswordAuthentication()
@@ -113,7 +110,7 @@ public class RecuperarSenhaBean
          return false;
       }
 
-      if (!Util.validarEmail(getEmail().trim()))
+      if (!Util.validarEmail(getEmail()))
       {
          Util.addMensagemErro("E-mail inválido");
          return false;

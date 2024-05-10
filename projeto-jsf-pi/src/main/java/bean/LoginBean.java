@@ -15,15 +15,20 @@ import util.Util;
 public class LoginBean
 {
 
-   private Login login = new Login();
+   private Login login;
 
    @ManagedProperty(value = "#{usuarioBean}")
    private UsuarioBean usuarioBean;
+   
+   public LoginBean() 
+   {
+      this.login = new Login();
+   }
 
    public String esqueciSenha()
    {
       this.login = new Login();
-      return "/seguranca/recupera-senha.xhtml?faces-redirect=true";
+      return "recupera-senha";
    }
 
    public String logar()

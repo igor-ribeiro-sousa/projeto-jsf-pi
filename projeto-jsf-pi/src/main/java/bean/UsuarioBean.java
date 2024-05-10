@@ -18,19 +18,27 @@ import util.Util;
 @SessionScoped
 public class UsuarioBean
 {
-   private Usuario usuario = new Usuario();
+   private Usuario usuario;
    private String nomeUsuarioLogado;
    private String senhaConfirmacao;
    private String emailOriginal;
    private String senhaAtual;
    private String nomeUsuarioPesquisa;
-   private List<Usuario> usuarios = new ArrayList<Usuario>();
-   private List<Usuario> listaResultado = new ArrayList<Usuario>();
+   private List<Usuario> usuarios;
+   private List<Usuario> listaResultado;
 
-   private boolean exibirResultadosPesquisa = false;
+   private boolean exibirResultadosPesquisa;
 
    @ManagedProperty(value = "#{navegacaoBean}")
    private NavegacaoBean navegacaoBean;
+   
+   public UsuarioBean() 
+   {
+      this.usuario = new Usuario();
+      this.usuarios = new ArrayList<Usuario>();
+      this.listaResultado = new ArrayList<Usuario>();
+      this.exibirResultadosPesquisa = false;
+   }
 
    public void inserir()
    {

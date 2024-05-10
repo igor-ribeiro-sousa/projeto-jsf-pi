@@ -19,10 +19,9 @@ public class MedicoBean
 {
    private Medico medico;
    private String nomeMedicoPesquisa;
-   private List<Medico> medicos = new ArrayList<Medico>();
-   private List<Medico> listaResultado = new ArrayList<Medico>();
-   
-   private boolean exibirResultadosPesquisa = false;
+   private List<Medico> medicos;
+   private List<Medico> listaResultado;
+   private boolean exibirResultadosPesquisa;
    
    @ManagedProperty(value = "#{navegacaoBean}")
    private NavegacaoBean navegacaoBean;
@@ -30,6 +29,9 @@ public class MedicoBean
    public MedicoBean()
    {
       this.medico = new Medico();
+      this.medicos = new ArrayList<Medico>();
+      this.listaResultado = new ArrayList<Medico>();
+      this.exibirResultadosPesquisa = false;
    }
    
    public void inserir()
@@ -40,15 +42,15 @@ public class MedicoBean
          {
             completarInserir();
             MedicoDAO.inserir(medico);
-            Util.addMensagemInfo("Médico inserido com sucesso!");
+            Util.addMensagemInfo("Médico inserido com sucesso!.");
             navegarParaPesquisar();
          }
 
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());
+         Util.addMensagemErro("Erro ao tentar inserir o médico. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar inserir o médico." , e);
       }
    }
    
@@ -67,15 +69,15 @@ public class MedicoBean
          {
             completarAlterar();
             this.medico = MedicoDAO.alterar(medico);
-            Util.addMensagemInfo("Médico alterado com sucesso!");
+            Util.addMensagemInfo("Médico alterado com sucesso!.");
             navegarParaPesquisar();
          }
 
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());
+         Util.addMensagemErro("Erro ao tentar alterar o médico. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar alterar o médico." , e);
       }
    }
 
@@ -103,11 +105,11 @@ public class MedicoBean
       try
       {
          MedicoDAO.excluir(id);
-         Util.addMensagemWarn("Médico excluído!");
+         Util.addMensagemWarn("Médico excluído com sucesso!.");
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro inesperado!");
+         Util.addMensagemErro("Erro ao tentar alterar o médico. Por favor, tente novamente mais tarde.");
          throw new JSFException(e.getMessage());        }
 
    }
@@ -129,8 +131,8 @@ public class MedicoBean
       }
       catch (JSFException e)
       {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());      
+         Util.addMensagemErro("Erro ao pesquisar!. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao pesquisar!.", e);      
       }
    }
    

@@ -5,9 +5,7 @@ import java.util.Date;
 public class Login {
 
 	private String login;
-
 	private String senha;
-
 	private Date dataNascimento;
 
 	public Login() {
