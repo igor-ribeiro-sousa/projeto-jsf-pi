@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 
@@ -28,6 +29,9 @@ public class AgendamentoBean
    private List<Agendamento> agendamentos;
    private List<Agendamento> listaResultado;
    private boolean exibirResultadosPesquisa;
+   
+   @ManagedProperty(value = "#{navegacaoBean}")
+   private NavegacaoBean navegacaoBean;
 
    public AgendamentoBean()
    {
@@ -58,6 +62,34 @@ public class AgendamentoBean
          throw new JSFException("Erro ao tentar agendar o exame.", e);
       }
       return null;
+   }
+   
+   public void agendarLogado()
+   {
+      try
+      {
+         if (validarInserir())
+         {
+            completarInserir();
+            AgendamentoDAO.inserir(agendamento);
+            Util.addMensagemInfo("Agendamento realizado com sucesso!. Número do agendamento: " + this.agendamento.getId());
+            atualizaAgendamento();
+            navegarParaPesquisar();
+         }
+
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro ao tentar agendar o exame. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar agendar o exame.", e);
+      }
+   }
+   
+   public void navegarParaPesquisar()
+   {
+      this.agendamento = new Agendamento();
+      this.agendamento.setMedico(new Medico());      
+      navegacaoBean.setCurrentPage("agendamento-pesquisar.xhtml");
    }
    
    private void atualizaAgendamento()
@@ -262,5 +294,15 @@ public class AgendamentoBean
    public void setExibirResultadosPesquisa(boolean exibirResultadosPesquisa)
    {
       this.exibirResultadosPesquisa = exibirResultadosPesquisa;
+   }
+
+   public NavegacaoBean getNavegacaoBean()
+   {
+      return navegacaoBean;
+   }
+
+   public void setNavegacaoBean(NavegacaoBean navegacaoBean)
+   {
+      this.navegacaoBean = navegacaoBean;
    }
 }
