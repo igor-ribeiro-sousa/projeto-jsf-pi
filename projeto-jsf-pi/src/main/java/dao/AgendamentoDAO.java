@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.ObjectInputFilter.Status;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.persistence.Query;
 
 import entidade.Agendamento;
 import entidade.Medico;
+import enuns.StatusAgendamento;
 import exception.JSFException;
 import util.JPAUtilService;
 
@@ -132,9 +134,10 @@ public class AgendamentoDAO
       try
       {
          Query query = entityManager.createQuery(
-               "SELECT COUNT(a) FROM Agendamento a INNER JOIN a.medico m WHERE a.dataHoraAgendamento = :dataAgendamento AND m.nome = :nomeMedico");
+               "SELECT COUNT(a) FROM Agendamento a INNER JOIN a.medico m WHERE a.dataHoraAgendamento = :dataAgendamento AND m.nome = :nomeMedico AND a.status = :status");
          query.setParameter("dataAgendamento", dataAgendamento);
          query.setParameter("nomeMedico", nomeMedico);
+         query.setParameter("status", StatusAgendamento.AGENDADO);
          Long count = (Long) query.getSingleResult();
          return count > 0;
       }

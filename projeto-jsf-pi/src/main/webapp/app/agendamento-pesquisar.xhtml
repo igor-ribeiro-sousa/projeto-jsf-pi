@@ -107,7 +107,7 @@
 				            update="contentPanel" type="submit">
 				        </p:commandButton>
 				
-				        <span style="margin-left: 5px;"></span>
+				        <span style="margin-left: 1px;"></span>
 				
 				        <p:commandButton action="#{agendamentoBean.deletar(item.id)}"
 				            icon="pi pi-trash" title="Deletar"
@@ -115,7 +115,16 @@
 				            update="formulario" type="submit">
 				            <f:param name="id" value="#{item.id}" />
 				        </p:commandButton>
-				    </p:column>
+				        
+				        <span style="margin-left: 1px;"></span>
+
+						<p:commandButton action="#{agendamentoBean.cancelar(item)}"
+							icon="pi pi-times" title="Cancelar"
+							styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-button-danger rounded-button"
+							update="formulario" type="submit">
+							<f:param name="id" value="#{item.id}" />
+						</p:commandButton>
+					</p:column>
 				</p:dataTable>
 
 				<div class="ui-g-12">

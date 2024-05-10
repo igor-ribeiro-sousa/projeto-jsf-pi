@@ -12,7 +12,6 @@ import javax.faces.model.SelectItem;
 
 import dao.AgendamentoDAO;
 import dao.MedicoDAO;
-import dao.UsuarioDAO;
 import entidade.Agendamento;
 import entidade.Medico;
 import enuns.Clinica;
@@ -220,7 +219,21 @@ public class AgendamentoBean
          Util.addMensagemErro("Erro ao tentar exluir agendamento. Por favor, tente novamente mais tarde.");
          throw new JSFException("Erro ao tentar exluir agendamento", e);        
       }
-
+   }
+   
+   public void cancelar(Agendamento agendamento)
+   {
+      try
+      {
+         agendamento.setStatus(StatusAgendamento.CANCELADO);
+         AgendamentoDAO.alterar(agendamento);
+         Util.addMensagemWarn("Agendamento cancelado com sucesso!");
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro ao tentar cancelar agendamento. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar cancelar agendamento", e);        
+      }
    }
    
    public void navegarParaAlterar()
