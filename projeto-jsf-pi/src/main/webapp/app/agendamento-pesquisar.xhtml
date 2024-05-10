@@ -101,7 +101,7 @@
 				    </p:column>
 				    
 				    <p:column headerText="Ações" style="text-align: center; cursor: pointer;">
-				        <p:commandButton action="#{usuarioBean.editar(item)}"
+				        <p:commandButton action="#{agendamentoBean.editar(item)}"
 				            icon="pi pi-pencil" title="Editar"
 				            styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only edit-button rounded-button ui-button-success"
 				            update="contentPanel" type="submit">
@@ -109,7 +109,7 @@
 				
 				        <span style="margin-left: 5px;"></span>
 				
-				        <p:commandButton action="#{usuarioBean.deletar(item.id)}"
+				        <p:commandButton action="#{agendamentoBean.deletar(item.id)}"
 				            icon="pi pi-trash" title="Deletar"
 				            styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-button-warning rounded-button"
 				            update="formulario" type="submit">

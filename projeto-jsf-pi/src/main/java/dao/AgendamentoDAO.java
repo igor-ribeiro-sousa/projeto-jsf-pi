@@ -170,7 +170,7 @@ public class AgendamentoDAO
          {
             transaction.rollback();
          }
-         throw new JSFException("Erro ao alterar o médico: " + e.getMessage());
+         throw new JSFException("Erro ao alterar agendamento: " + e.getMessage());
       }
       finally
       {

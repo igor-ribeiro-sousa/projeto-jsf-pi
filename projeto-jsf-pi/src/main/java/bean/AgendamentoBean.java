@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 
 import dao.AgendamentoDAO;
 import dao.MedicoDAO;
+import dao.UsuarioDAO;
 import entidade.Agendamento;
 import entidade.Medico;
 import enuns.Clinica;
@@ -25,6 +26,7 @@ public class AgendamentoBean
 {
    private Agendamento agendamento;
    private String nomeMedicoPesquisa;
+   private Date dataAgendamentoAtual;
    private List<Medico> medicosCadastrados;
    private List<Agendamento> agendamentos;
    private List<Agendamento> listaResultado;
@@ -83,6 +85,33 @@ public class AgendamentoBean
          Util.addMensagemErro("Erro ao tentar agendar o exame. Por favor, tente novamente mais tarde.");
          throw new JSFException("Erro ao tentar agendar o exame.", e);
       }
+   }
+   
+   public void alterar()
+   {
+      try
+      {
+         if (validarAlterar())
+         {
+            completarAlterar();
+            this.agendamento = AgendamentoDAO.alterar(agendamento);
+            Util.addMensagemInfo("Agendamento alterado com sucesso!");
+            navegarParaPesquisar();
+         }
+
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro ao tentar agendar consulta. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar agendar consulta.", e);
+      }
+   }
+
+   public void completarAlterar()
+   {
+      this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
+      this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
+      completarMedico();
    }
    
    public void navegarParaPesquisar()
@@ -165,6 +194,40 @@ public class AgendamentoBean
       }
    }
    
+   public void editar(Agendamento agendamento)
+   {
+      try
+      {
+         this.agendamento = agendamento;
+         this.dataAgendamentoAtual = agendamento.getDataHoraAgendamento();
+         navegarParaAlterar();
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         throw new JSFException(e.getMessage());        }
+   }
+   
+   public void deletar(Integer id)
+   {
+      try
+      {
+         AgendamentoDAO.excluir(id);
+         Util.addMensagemWarn("Agendamento excluído !");
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro ao tentar exluir agendamento. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar exluir agendamento", e);        
+      }
+
+   }
+   
+   public void navegarParaAlterar()
+   {
+      navegacaoBean.setCurrentPage("agendamento-alterar.xhtml");
+   }
+   
    public List<SelectItem> getClinicas()
    {
       List<SelectItem> clinica = new ArrayList<>();
@@ -218,6 +281,62 @@ public class AgendamentoBean
       {
          Util.addMensagemErro("Data do agendamento indisponível.");
          return false;
+      }
+
+      if (agendamento.getDataHoraAgendamento().before(new Date()))
+      {
+         Util.addMensagemErro("Data do agendamento não pode ser no passado.");
+         return false;
+      }
+
+      return true;
+   }
+   
+   private boolean validarAlterar()
+   {
+      if (Util.isCampoNullOrVazio(agendamento.getNomePaciente()))
+      {
+         Util.addMensagemErro("Nome do paciente obrigatório.");
+         return false;
+      }
+
+      if (Util.isCampoNullOrVazio(agendamento.getEmailPaciente()))
+      {
+         Util.addMensagemErro("E-mail obrigatório.");
+         return false;
+      }
+
+      if (!Util.validarEmail(agendamento.getEmailPaciente().trim()))
+      {
+         Util.addMensagemErro("E-mail inválido.");
+         return false;
+      }
+
+      if (Objects.isNull(agendamento.getClinica()))
+      {
+         Util.addMensagemErro("Nome da clínica obrigatório.");
+         return false;
+      }
+      
+      if (Objects.isNull(agendamento.getMedico().getNome()))
+      {
+         Util.addMensagemErro("Nome do médico obrigatório.");
+         return false;
+      }
+      
+      if (Objects.isNull(agendamento.getDataHoraAgendamento()))
+      {
+         Util.addMensagemErro("Data do agendamento obrigatória.");
+         return false;
+      }
+      
+      if (!agendamento.getDataHoraAgendamento().equals(this.dataAgendamentoAtual))
+      {
+         if (verificarDisponibilidadeAgendamento(agendamento.getDataHoraAgendamento())) 
+         {
+            Util.addMensagemErro("Data do agendamento indisponível.");
+            return false;
+         }
       }
 
       if (agendamento.getDataHoraAgendamento().before(new Date()))
@@ -304,5 +423,15 @@ public class AgendamentoBean
    public void setNavegacaoBean(NavegacaoBean navegacaoBean)
    {
       this.navegacaoBean = navegacaoBean;
+   }
+
+   public Date getDataAgendamentoAtual()
+   {
+      return dataAgendamentoAtual;
+   }
+
+   public void setDataAgendamentoAtual(Date dataAgendamentoAtual)
+   {
+      this.dataAgendamentoAtual = dataAgendamentoAtual;
    }
 }

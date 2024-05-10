@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<title>Agendamento - Alterar</title>
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			overflow: hidden;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		body {
+			background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28,
+				#141d2e);
+		}
+		
+		.card-container {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
+		
+		.card {
+			width: 40rem;
+		}
+		
+		.form-container label {
+			display: block;
+			font-weight: bold;
+		}
+	</style>
+	<script>
+		PrimeFaces.locales['pt'] = {
+	            closeText: 'Fechar',
+	            prevText: 'Anterior',
+	            nextText: 'Próximo',
+	            currentText: 'Começo',
+	            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+	            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+	            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+	            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+	            dayNamesMin: ['D','S','T','Q','Q','S','S'],
+	            weekHeader: 'Semana',
+	            firstDay: 1,
+	            isRTL: false,
+	            showMonthAfterYear: false,
+	            yearSuffix: '',
+	            timeOnlyTitle: 'Só Horas',
+	            timeText: 'Tempo',
+	            hourText: 'Hora',
+	            minuteText: 'Minuto',
+	            secondText: 'Segundo',
+	            currentText: 'Data Atual',
+	            ampm: false,
+	            month: 'Mês',
+	            week: 'Semana',
+	            day: 'Dia',
+	            allDayText : 'Todo Dia'
+		    };
+	</script>
+</h:head>
+
+<h:body>
+	<div class="card-container">
+		<p:card styleClass="card">
+			<f:facet name="title">
+				Agendamento - Alterar
+			</f:facet>
+
+			<div class="form-container">
+				<h:form id="formulario">
+				
+					<p:messages id="messages" showDetail="true" closable="true">
+						<p:autoUpdate />
+					</p:messages>
+
+					<div class="ui-g">
+
+						<div class="ui-g-12">
+							<p:outputLabel for="nomePaciente" value="Nome do Paciente:" />
+							<div class="ui-input-icon-right">
+								<i class="pi pi-user" />
+								<p:inputText id="nomePaciente" style="width: 38rem;"
+									value="#{agendamentoBean.agendamento.nomePaciente}"
+									placeholder="Digite o nome do paciente" />
+							</div>
+						</div>
+
+						<div class="ui-g-12">
+							<p:outputLabel for="email" value="Email:" />
+							<div class="ui-input-icon-right">
+								<i class="pi pi-envelope" />
+								<p:inputText id="email" style="width: 38rem;"
+									value="#{agendamentoBean.agendamento.emailPaciente}"
+									placeholder="Digite seu e-mail" />
+							</div>
+						</div>
+
+						<div class="ui-g-12">
+							<p:outputLabel for="clinica" value="Clínica:" />
+							<p:selectOneMenu id="clinica" style="width: 38rem;"
+								value="#{agendamentoBean.agendamento.clinica}">
+								<f:selectItems value="#{agendamentoBean.clinicas}" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="ui-g-12">
+							<p:selectOneMenu id="medico" style="width: 38rem;"
+								value="#{agendamentoBean.agendamento.medico.nome}">
+								<f:selectItems value="#{agendamentoBean.medicosCadastrados}"
+									var="medico" itemValue="#{medico.nome}"
+									itemLabel="#{medico.nome}" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="ui-g-12">
+							<p:outputLabel for="dataHoraAgendamento"
+								value="Data e Hora do Agendamento:" />
+							<p:calendar id="dataHoraAgendamento"
+								value="#{agendamentoBean.agendamento.dataHoraAgendamento}"
+								style="width: 38rem;" placeholder="Data e Hora"
+								pattern="dd/MM/yyyy HH:mm" mask="true" showButtonPanel="true"
+								navigator="true" showIcon="true" showOn="button" />
+						</div>
+					</div>
+					<br />
+
+					<div class="ui-g-12">
+						<div style="display: flex; justify-content: flex-end; gap: 10px;">
+							<p:commandButton value="Voltar"
+									actionListener="#{agendamentoBean.navegarParaPesquisar}"
+									styleClass="ui-button-secondary" update="contentPanel" />
+									
+								<p:commandButton value="Alterar" icon="pi pi-check"
+									action="#{agendamentoBean.alterar}" update="contentPanel"
+									styleClass="ui-button-success" />
+						</div>
+					</div>
+
+				</h:form>
+			</div>
+		</p:card>
+	</div>
+</h:body>
+</html>
