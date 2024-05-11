@@ -35,12 +35,12 @@ public class RecuperarSenhaBean
          if (Objects.nonNull(usuario))
          {
             String novaSenha = gerarNovaSenha();
+            usuario.setSenha(Util.gerarHashSenha(novaSenha));
+            UsuarioDAO.alterar(usuario);
             new Thread(() -> enviarEmailRecuperacaoSenha(this.email, novaSenha)).start();
             
-               usuario.setSenha(Util.gerarHashSenha(novaSenha));
-               UsuarioDAO.alterar(usuario);
-               Util.addMensagemInfo("Email de recuperação de senha enviado com sucesso!");
-               return "index";
+            Util.addMensagemInfo("Email de recuperação de senha enviado com sucesso!");
+            return "index";
          }
          else
          {

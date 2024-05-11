@@ -281,6 +281,7 @@ public class AgendamentoBean
          message.setText(corpoEmail);
 
          Transport.send(message);
+         System.out.println("Email enviado com sucesso!");
          return true;
       }
       catch (MessagingException e)

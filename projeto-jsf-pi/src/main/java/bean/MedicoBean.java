@@ -104,13 +104,21 @@ public class MedicoBean
    {
       try
       {
-         MedicoDAO.excluir(id);
-         Util.addMensagemWarn("Médico excluído com sucesso!.");
+         if (!MedicoDAO.possuiAgendamentos(id))
+         {
+            MedicoDAO.excluir(id);
+            Util.addMensagemWarn("Médico excluído com sucesso!");
+         }
+         else
+         {
+            Util.addMensagemErro("Este médico possui agendamentos e não pode ser excluído. "
+                  + "Por favor, remova todos os agendamentos associados a ele e tente novamente.");
+         }
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro ao tentar alterar o médico. Por favor, tente novamente mais tarde.");
-         throw new JSFException(e.getMessage());        }
+         Util.addMensagemErro("Erro ao tentar excluir o médico. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar excluir o médico.", e);        }
 
    }
    

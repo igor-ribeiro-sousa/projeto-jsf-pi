@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import entidade.Medico;
 import entidade.Usuario;
+import enuns.StatusAgendamento;
 import exception.JSFException;
 import util.JPAUtilService;
 
@@ -135,6 +136,30 @@ public class MedicoDAO
       return entityManager.merge(medico);
    }
 
+   public static boolean possuiAgendamentos(Integer idMedico)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+      try
+      {
+         Query query = entityManager
+               .createQuery("SELECT COUNT(a) FROM Agendamento a WHERE a.medico.id = :idMedico");
+         query.setParameter("idMedico", idMedico);
+         Long count = (Long) query.getSingleResult();
+         return count > 0;
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+   }
 
    public static void excluir(Integer id)
    {
