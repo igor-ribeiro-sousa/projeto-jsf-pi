@@ -26,7 +26,7 @@ public class RecuperarSenhaBean
    private Date dataNascimento;
    private String novaSenha;
 
-   public void recuperarSenha()
+   public String recuperarSenha()
    {
       this.email = this.email.toUpperCase().trim();
       if (validarRecuperarSenha())
@@ -34,25 +34,24 @@ public class RecuperarSenhaBean
          Usuario usuario = UsuarioDAO.recuperarSenha(this.email, this.dataNascimento);
          if (Objects.nonNull(usuario))
          {
-            if (enviarEmailRecuperacaoSenha(this.email))
-            {
+            String novaSenha = gerarNovaSenha();
+            new Thread(() -> enviarEmailRecuperacaoSenha(this.email, novaSenha)).start();
+            
                usuario.setSenha(Util.gerarHashSenha(novaSenha));
                UsuarioDAO.alterar(usuario);
                Util.addMensagemInfo("Email de recuperação de senha enviado com sucesso!");
-            }
-            else
-            {
-               Util.addMensagemErro("Falha ao enviar email de recuperação de senha. Por favor, tente novamente!");
-            }
+               return "index";
          }
          else
          {
-            Util.addMensagemErro("Usuário não encontrado!");
+            Util.addMensagemErro("Usuário não encontrado para o email fornecido.");
+            return null;
          }
       }
+      return null;
    }
 
-   private boolean enviarEmailRecuperacaoSenha(String destinatario)
+   private boolean enviarEmailRecuperacaoSenha(String destinatario, String novaSenha)
    {
       final String remetente = "antonio.sousa09@aluno.unifametro.edu.br";
       final String senhaRemetente = "wwgu vpaf uvre fnrq";
@@ -77,7 +76,6 @@ public class RecuperarSenhaBean
          message.setFrom(new InternetAddress(remetente));
          message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
          message.setSubject("Recuperação de Senha");
-         String novaSenha = gerarNovaSenha();
          message.setText("Sua nova senha é: " + novaSenha);
 
          Transport.send(message);
