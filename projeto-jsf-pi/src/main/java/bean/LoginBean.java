@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import dao.UsuarioDAO;
 import entidade.Login;
+import entidade.Usuario;
+import exception.JSFException;
 import util.Util;
 
 @ManagedBean
@@ -16,13 +18,12 @@ public class LoginBean
 {
 
    private Login login;
-
-   @ManagedProperty(value = "#{usuarioBean}")
-   private UsuarioBean usuarioBean;
+   private Usuario usuario;
    
    public LoginBean() 
    {
       this.login = new Login();
+      this.usuario = new Usuario();
    }
 
    public String esqueciSenha()
@@ -41,6 +42,7 @@ public class LoginBean
             String senha = Util.gerarHashSenha(getLogin().getSenha().trim());
             if (UsuarioDAO.logar(email, senha))
             {
+               this.usuario = salvarUsuarioLogado(email);
                HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
                session.setAttribute("usuario", login);
                return "/app/navegacao.xhtml?faces-redirect=true";
@@ -56,6 +58,19 @@ public class LoginBean
          }
       }
       return null;
+   }
+   
+   public Usuario salvarUsuarioLogado(String email)
+   {
+      try
+      {
+        return UsuarioDAO.pesquisarUsuarioPorEmail(email);
+      }
+      catch (JSFException e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         throw new JSFException(e.getMessage());
+      }
    }
 
    public String logout()
@@ -97,14 +112,14 @@ public class LoginBean
       this.login = login;
    }
 
-   public UsuarioBean getUsuarioBean()
+   public Usuario getUsuario()
    {
-      return usuarioBean;
+      return usuario;
    }
 
-   public void setUsuarioBean(UsuarioBean usuarioBean)
+   public void setUsuario(Usuario usuario)
    {
-      this.usuarioBean = usuarioBean;
+      this.usuario = usuario;
    }
 
 }

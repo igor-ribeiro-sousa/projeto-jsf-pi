@@ -66,10 +66,10 @@ public class UsuarioDAO
       }
    }
 
-   public static String pesquisarUsuarioPorEmail(String email)
+   public static Usuario pesquisarUsuarioPorEmail(String email)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
-      String nomeUsuariosuarioEncontrado = null;
+      Usuario usuarioLogado = null;
 
       try
       {
@@ -79,12 +79,12 @@ public class UsuarioDAO
          List<Usuario> resultados = query.getResultList();
          if (!resultados.isEmpty())
          {
-            nomeUsuariosuarioEncontrado = resultados.get(0).getNome();
+           usuarioLogado = resultados.get(0);
          }
       }
       catch (Exception e)
       {
-         e.printStackTrace();
+         throw new JSFException("Erro ao obter a usuário: " + e.getMessage());
       }
       finally
       {
@@ -93,8 +93,7 @@ public class UsuarioDAO
             entityManager.close();
          }
       }
-
-      return nomeUsuariosuarioEncontrado;
+      return usuarioLogado;
    }
 
    public static List<Usuario> pesquisarPorUsuario(String nomeUsuario)

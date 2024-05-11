@@ -105,7 +105,8 @@
 						<p:commandButton action="#{usuarioBean.deletar(item.id)}"
 							icon="pi pi-trash" title="Deletar"
 							styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-button-warning rounded-button"
-							update="formulario" type="submit">
+							update="formulario" type="submit"
+                			rendered="#{loginBean.usuario.id ne item.id}">
 							<f:param name="id" value="#{item.id}" />
 						</p:commandButton>
 

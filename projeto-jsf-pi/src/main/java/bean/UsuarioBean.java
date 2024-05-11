@@ -19,7 +19,6 @@ import util.Util;
 public class UsuarioBean
 {
    private Usuario usuario;
-   private String nomeUsuarioLogado;
    private String senhaConfirmacao;
    private String emailOriginal;
    private String senhaAtual;
@@ -31,6 +30,9 @@ public class UsuarioBean
 
    @ManagedProperty(value = "#{navegacaoBean}")
    private NavegacaoBean navegacaoBean;
+   
+   @ManagedProperty(value = "#{loginBean}")
+   private LoginBean loginBean;
    
    public UsuarioBean() 
    {
@@ -83,6 +85,7 @@ public class UsuarioBean
          {
             completarAlterar();
             this.usuario = UsuarioDAO.alterar(usuario);
+            this.loginBean.setUsuario(usuario);
             Util.addMensagemInfo("Usuário alterado com sucesso!");
             navegarParaPesquisar();
          }
@@ -121,25 +124,6 @@ public class UsuarioBean
    public void navegarParaAlterar()
    {
       navegacaoBean.setCurrentPage("usuario-alterar.xhtml");
-   }
-
-   public String pesquisarUsuarioPorEmail(String email)
-   {
-      try
-      {
-         if (!Util.isCampoNullOrVazio(email))
-         {
-            setNomeUsuarioLogado(UsuarioDAO.pesquisarUsuarioPorEmail(email.toUpperCase().trim()));
-            return getNomeUsuarioLogado();
-         }
-
-      }
-      catch (JSFException e)
-      {
-         Util.addMensagemErro("Erro inesperado!");
-         throw new JSFException(e.getMessage());
-      }
-      return null;
    }
 
    public boolean existeUsuarioPorEmail(String email)
@@ -440,16 +424,6 @@ public class UsuarioBean
       this.emailOriginal = emailOriginal;
    }
 
-   public String getNomeUsuarioLogado()
-   {
-      return nomeUsuarioLogado;
-   }
-
-   public void setNomeUsuarioLogado(String nomeUsuarioLogado)
-   {
-      this.nomeUsuarioLogado = nomeUsuarioLogado;
-   }
-
    public String getSenhaAtual()
    {
       return senhaAtual;
@@ -460,4 +434,13 @@ public class UsuarioBean
       this.senhaAtual = senhaAtual;
    }
 
+   public LoginBean getLoginBean()
+   {
+      return loginBean;
+   }
+
+   public void setLoginBean(LoginBean loginBean)
+   {
+      this.loginBean = loginBean;
+   }
 }
