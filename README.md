@@ -15,6 +15,16 @@ Olá e seja muito bem-vindo ao projeto da disciplina de Projeto Integrador!
    - Criar a página home que exiba as informações do usuário logado.
    - Criar uma página para realizar o CRUD de usuário.
 
+5. **Cadastro de Agendamentos:**
+   - Implementação de uma página para o cadastro de agendamentos. Os dados mínimos necessários incluem: ID, nome do paciente, e-mail, status do agendamento (agendado, cancelado ou realizado), clínica, médico, data e hora do agendamento, e data de cadastro (gerada automaticamente).
+   - Agendamentos recém-cadastrados serão automaticamente marcados como "agendado".
+   - Verificação para evitar o cadastro de agendamentos duplicados, data, hora e médico. Caso um agendamento já exista, o usuário será notificado.
+   - Após o cadastro de um agendamento, o paciente receberá o ID do agendamento.
+
+6. **Cadastro de Médico:**
+   - Implementação de uma página para o cadastro de médicos. Os dados mínimos necessários incluem: ID e nome do médico.
+
+
 ## Documentação
 
 5. **Relatório:**
