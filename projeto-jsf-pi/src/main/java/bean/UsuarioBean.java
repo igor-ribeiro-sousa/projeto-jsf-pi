@@ -151,6 +151,7 @@ public class UsuarioBean
          else
          {
             this.listaResultado = UsuarioDAO.pesquisar();
+            this.exibirResultadosPesquisa = false;
          }
 
       }

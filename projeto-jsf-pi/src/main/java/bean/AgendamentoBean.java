@@ -166,6 +166,7 @@ public class AgendamentoBean
          else
          {
             this.listaResultado = AgendamentoDAO.pesquisar();
+            this.exibirResultadosPesquisa = false;
          }
 
       }

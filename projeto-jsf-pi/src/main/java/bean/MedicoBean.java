@@ -134,6 +134,7 @@ public class MedicoBean
          else
          {
             this.listaResultado = MedicoDAO.pesquisar();
+            this.exibirResultadosPesquisa = false;
          }
 
       }
