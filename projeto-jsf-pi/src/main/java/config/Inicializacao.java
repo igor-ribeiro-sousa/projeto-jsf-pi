@@ -48,6 +48,18 @@ public class Inicializacao implements ServletContextListener
                      "DR CARLOS EDUARDO", 
                      "S", 
                      new Date()));
+               
+               Medico medico3 = MedicoDAO.inserir(setMedico(
+                     null, 
+                     "DR EDUARDA COSTA", 
+                     "S", 
+                     new Date()));
+               
+               Medico medico4 = MedicoDAO.inserir(setMedico(
+                     null, 
+                     "DR ZEZE", 
+                     "S", 
+                     new Date()));
             System.out.println("Médicos inseridos com sucesso.");
             
             
@@ -59,7 +71,17 @@ public class Inicializacao implements ServletContextListener
                   "IGORRIBEIROSDEV@GMAIL.COM", 
                   StatusAgendamento.AGENDADO, 
                   Clinica.HOSPITAL_OTOCLINICA, 
-                  new SimpleDateFormat("dd/MM/yyyy HH:mm").parse("15/05/2024 15:00"), 
+                  new SimpleDateFormat("dd/MM/yyyy HH:mm").parse("20/05/2024 15:00"), 
+                  new Date()));
+            
+            AgendamentoDAO.inserir(setAgendamento(
+                  null, 
+                  "RIBEIRO", 
+                  medico3.getId(), 
+                  "IGORRIBEIROSDEV@GMAIL.COM", 
+                  StatusAgendamento.AGENDADO, 
+                  Clinica.HOSPITAL_OTOCLINICA, 
+                  new SimpleDateFormat("dd/MM/yyyy HH:mm").parse("22/05/2024 10:00"), 
                   new Date()));
             
             AgendamentoDAO.inserir(setAgendamento(

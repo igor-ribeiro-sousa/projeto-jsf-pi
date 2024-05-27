@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,35 +25,35 @@ public class Agendamento
 
    @Id
    @Column(name = "CD_AGD")
-   @GeneratedValue
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @Column(name = "NM_PCT")
+   @Column(name = "NM_PCT", nullable = false)
    private String nomePaciente;
 
-   @Column(name = "CD_MDC")
+   @Column(name = "CD_MDC", unique = true, nullable = false)
    private Integer codigoMedico;
    
    @ManyToOne
    @JoinColumn(name = "CD_MDC", insertable = false, updatable = false)
    private Medico medico;
 
-   @Column(name = "EM_PCT")
+   @Column(name = "EM_PCT", nullable = false)
    private String emailPaciente;
 
-   @Column(name = "ST_AGD")
+   @Column(name = "ST_AGD", nullable = false)
    @Enumerated(EnumType.STRING)
    private StatusAgendamento status;
 
-   @Column(name = "NM_CLN")
+   @Column(name = "NM_CLN", nullable = false)
    @Enumerated(EnumType.STRING)
    private Clinica clinica;
 
-   @Column(name = "DT_AGD")
+   @Column(name = "DT_AGD", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
    private Date dataHoraAgendamento;
 
-   @Column(name = "DT_INC")
+   @Column(name = "DT_INC", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
    private Date dataInclusao;
 

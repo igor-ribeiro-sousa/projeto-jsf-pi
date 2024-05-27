@@ -20,23 +20,23 @@ public class Usuario
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @Column(name = "NM_USR")
+   @Column(name = "NM_USR", nullable = false)
    private String nome;
 
-   @Column(name = "EM_USR", unique = true)
+   @Column(name = "EM_USR", unique = true, nullable = false)
    private String email;
 
-   @Column(name = "SH_USR")
+   @Column(name = "SH_USR", nullable = false)
    private String senha;
 
-   @Column(name = "FG_ATV")
+   @Column(name = "FG_ATV", nullable = false)
    private String flagAtivo;
 
-   @Column(name = "DT_NSC")
+   @Column(name = "DT_NSC", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
    private Date dataNascimento;
 
-   @Column(name = "DT_INC")
+   @Column(name = "DT_INC", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
    private Date dataInclusao;
    

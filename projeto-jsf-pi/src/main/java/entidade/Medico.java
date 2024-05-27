@@ -20,13 +20,13 @@ public class Medico
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @Column(name = "NM_MDC")
+   @Column(name = "NM_MDC", nullable = false)
    private String nome;
 
-   @Column(name = "FG_ATV")
+   @Column(name = "FG_ATV", nullable = false)
    private String flagAtivo;
 
-   @Column(name = "DT_INC")
+   @Column(name = "DT_INC", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
    private Date dataInclusao;
 
