@@ -31,7 +31,7 @@ public class Agendamento
    @Column(name = "NM_PCT", nullable = false)
    private String nomePaciente;
 
-   @Column(name = "CD_MDC", unique = true, nullable = false)
+   @Column(name = "CD_MDC", nullable = false)
    private Integer codigoMedico;
    
    @ManyToOne

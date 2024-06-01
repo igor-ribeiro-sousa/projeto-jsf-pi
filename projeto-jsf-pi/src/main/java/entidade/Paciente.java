@@ -19,16 +19,16 @@ public class Paciente
    @Column(name = "CD_PCT")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
-   
+
    @Column(name = "DC_PCT", unique = true, nullable = false)
    private String cpf;
 
    @Column(name = "NM_PCT", nullable = false)
    private String nome;
-   
+
    @Column(name = "SX_PCT", nullable = false)
    private String sexo;
-   
+
    @Column(name = "FG_ATV", nullable = false)
    private String flagAtivo;
 
@@ -109,5 +109,5 @@ public class Paciente
    {
       this.dataInclusao = dataInclusao;
    }
-   
+
 }
