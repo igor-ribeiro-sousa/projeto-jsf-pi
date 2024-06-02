@@ -8,7 +8,7 @@
 
 <h:head>
 
-	<title>Agendamento - Inserir</title>
+	<title>Paciente - Alterar</title>
 	<style>
 html, body {
 	height: 100%;
@@ -78,7 +78,7 @@ body {
 	<div class="card-container">
 		<p:card styleClass="card">
 			<f:facet name="title">
-					Agendamento - Inserir
+					Paciente - Alterar
 			</f:facet>
 
 			<div class="form-container">
@@ -89,53 +89,63 @@ body {
 					</p:messages>
 
 					<div class="ui-g">
-
 						<div class="ui-g-12">
 							<p:outputLabel for="nomePaciente" value="Nome do Paciente:" />
 							<div class="ui-input-icon-right">
 								<i class="pi pi-user" />
 								<p:inputText id="nomePaciente" style="width: 38rem;"
-									value="#{agendamentoBean.agendamento.nomePaciente}"
+									value="#{pacienteBean.paciente.nome}"
 									placeholder="Digite o nome do paciente" />
 							</div>
 						</div>
+					</div>
+					
+					<div class="ui-g">
+						<div class="ui-g-12">
+							<p:outputLabel for="cpf" value="CPF" />
+							<div class="ui-input-icon-right">
+								<i class="pi pi-id-card" />
+								<p:inputMask id="cpf" style="width: 38rem;"
+									value="#{pacienteBean.paciente.cpf}" mask="999.999.999-99"
+									placeholder="Digite seu cpf" />
+							</div>
+						</div>
+					</div>
 
+					<div class="ui-g">
 						<div class="ui-g-12">
 							<p:outputLabel for="email" value="Email:" />
 							<div class="ui-input-icon-right">
 								<i class="pi pi-envelope" />
 								<p:inputText id="email" style="width: 38rem;"
-									value="#{agendamentoBean.agendamento.emailPaciente}"
+									value="#{pacienteBean.paciente.email}"
 									placeholder="Digite seu e-mail" />
 							</div>
 						</div>
-
-						<div class="ui-g-12">
-							<p:outputLabel for="clinica" value="Clínica:" />
-							<p:selectOneMenu id="clinica" style="width: 38rem;"
-								value="#{agendamentoBean.agendamento.clinica}">
-								<f:selectItems value="#{agendamentoBean.clinicas}" />
-							</p:selectOneMenu>
+					</div>
+					
+					<div class="ui-g">
+						<div class="ui-g-6">
+							<p:outputLabel for="sexo" value="Sexo: " />
+							<p:selectOneRadio id="sexo" 
+								value="#{pacienteBean.paciente.sexo}">
+								<f:selectItems value="#{pacienteBean.sexo}" var="s"
+									itemLabel="#{s.label}" itemValue="#{s}" />
+								<p:ajax update="sexo" />
+							</p:selectOneRadio>
 						</div>
+					</div>
 
-						<div class="ui-g-12">
-							<p:outputLabel for="medico" value="Médicos:" />
-							<p:selectOneMenu id="medico" style="width: 38rem;"
-								value="#{agendamentoBean.agendamento.medico.nome}">
-								<f:selectItems value="#{agendamentoBean.medicosCadastrados}"
-									var="medico" itemValue="#{medico.nome}"
-									itemLabel="#{medico.nome}" />
-							</p:selectOneMenu>
-						</div>
-
-						<div class="ui-g-12">
-							<p:outputLabel for="dataHoraAgendamento"
-								value="Data e Hora do Agendamento:" />
-							<p:calendar id="dataHoraAgendamento"
-								value="#{agendamentoBean.agendamento.dataHoraAgendamento}"
-								style="width: 38rem;" placeholder="Data e Hora"
-								pattern="dd/MM/yyyy HH:mm" mask="true" showButtonPanel="true"
-								navigator="true" showIcon="true" showOn="button" />
+					<div class="ui-g">
+						<div class="ui-g-6">
+							<p:outputLabel value="Data de Nascimento:" />
+							<div class="ui-input-icon-left">
+								<p:calendar id="mask"
+									value="#{pacienteBean.paciente.dataNascimento}"
+									placeholder="Data de nascimento" pattern="dd/MM/yyyy"
+									mask="true" yearRange="c-100:c" showButtonPanel="true"
+									navigator="true" showIcon="true" showOn="button" />
+							</div>
 						</div>
 					</div>
 					<br />
@@ -143,11 +153,11 @@ body {
 					<div class="ui-g-12">
 						<div style="display: flex; justify-content: flex-end; gap: 10px;">
 							<p:commandButton value="Voltar"
-								actionListener="#{navegacaoBean.setCurrentPage('agendamento-pesquisar.xhtml')}"
+								actionListener="#{pacienteBean.navegarParaPesquisar}"
 								styleClass="ui-button-secondary" update="contentPanel" />
 
-							<p:commandButton value="Inserir" icon="pi pi-check"
-								action="#{agendamentoBean.agendarLogado}" update="contentPanel"
+							<p:commandButton value="Alterar" icon="pi pi-check"
+								action="#{pacienteBean.alterar}" update="contentPanel"
 								styleClass="ui-button-success" />
 						</div>
 					</div>

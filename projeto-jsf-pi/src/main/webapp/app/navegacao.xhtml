@@ -104,16 +104,21 @@
     <div class="navigation-container">
         <h:form>
             <p:megaMenu orientation="vertical" autoDisplay="false" styleClass="p-megamenu-vertical">
+                
                 <p:menuitem value="Home" actionListener="#{navegacaoBean.setCurrentPage('home.xhtml')}"
                     icon="pi pi-home" update="contentPanel" />
+                    
+                <p:menuitem value="Paciente"
+                    actionListener="#{navegacaoBean.setCurrentPage('paciente-pesquisar.xhtml')}"
+                    icon="pi pi-user" update="contentPanel" />
+                    
+				<p:menuitem value="Médico"
+                    actionListener="#{navegacaoBean.setCurrentPage('medico-pesquisar.xhtml')}"
+                    icon="pi pi-heart" update="contentPanel" />
                     
                 <p:menuitem value="Agendamento"
                     actionListener="#{navegacaoBean.setCurrentPage('agendamento-pesquisar.xhtml')}"
                     icon="pi pi-clock" update="contentPanel" />
-
-				<p:menuitem value="Médico"
-                    actionListener="#{navegacaoBean.setCurrentPage('medico-pesquisar.xhtml')}"
-                    icon="pi pi-heart" update="contentPanel" />
 
                 <p:menuitem value="Usuário"
                     actionListener="#{navegacaoBean.setCurrentPage('usuario-pesquisar.xhtml')}"

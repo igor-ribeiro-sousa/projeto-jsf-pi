@@ -19,6 +19,46 @@ public class Util
       Matcher matcher = pattern.matcher(email);
       return matcher.matches();
    }
+   
+   public static boolean validarCPF(String cpf) {
+      cpf = cpf.replaceAll("[^0-9]", "");
+
+      if (cpf.length() != 11) {
+          return false;
+      }
+
+      boolean allEqual = true;
+      char firstDigit = cpf.charAt(0);
+      for (char digit : cpf.toCharArray()) {
+          if (digit != firstDigit) {
+              allEqual = false;
+              break;
+          }
+      }
+      if (allEqual) {
+          return false;
+      }
+
+      int soma = 0;
+      for (int i = 0; i < 9; i++) {
+          soma += (cpf.charAt(i) - '0') * (10 - i);
+      }
+      int firstDV = 11 - (soma % 11);
+      if (firstDV > 9) {
+          firstDV = 0;
+      }
+
+      soma = 0;
+      for (int i = 0; i < 10; i++) {
+          soma += (cpf.charAt(i) - '0') * (11 - i);
+      }
+      int secondDV = 11 - (soma % 11);
+      if (secondDV > 9) {
+          secondDV = 0;
+      }
+
+      return (cpf.charAt(9) - '0' == firstDV) && (cpf.charAt(10) - '0' == secondDV);
+  }
 
    public static String gerarHashSenha(String senha)
    {

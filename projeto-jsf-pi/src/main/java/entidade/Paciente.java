@@ -4,12 +4,16 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import enuns.Sexo;
 
 @Entity
 @Table(name = "TBL_PCT")
@@ -25,9 +29,13 @@ public class Paciente
 
    @Column(name = "NM_PCT", nullable = false)
    private String nome;
-
+   
+   @Column(name = "EM_PCT", nullable = false)
+   private String email;
+   
    @Column(name = "SX_PCT", nullable = false)
-   private String sexo;
+   @Enumerated(EnumType.STRING)
+   private Sexo sexo;
 
    @Column(name = "FG_ATV", nullable = false)
    private String flagAtivo;
@@ -69,13 +77,23 @@ public class Paciente
    {
       this.nome = nome;
    }
+   
+   public String getEmail()
+   {
+      return email;
+   }
 
-   public String getSexo()
+   public void setEmail(String email)
+   {
+      this.email = email;
+   }
+
+   public Sexo getSexo()
    {
       return sexo;
    }
 
-   public void setSexo(String sexo)
+   public void setSexo(Sexo sexo)
    {
       this.sexo = sexo;
    }
@@ -109,5 +127,4 @@ public class Paciente
    {
       this.dataInclusao = dataInclusao;
    }
-
 }
