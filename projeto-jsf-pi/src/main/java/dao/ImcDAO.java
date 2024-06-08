@@ -20,7 +20,7 @@ public class ImcDAO
 
       try
       {
-         Query query = entityManager.createQuery("select j from IMC j");
+         Query query = entityManager.createQuery("SELECT imc FROM IMC imc");
          List<IMC> resutado = query.getResultList();
          return resutado;
 
@@ -39,16 +39,16 @@ public class ImcDAO
       }
    }
 
-   public static List<Paciente> pesquisarPorPaciente(String nome)
+   public static List<IMC> pesquisarImcPorNomePaciente(String nome)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
       try
       {
-         Query query = entityManager.createQuery("SELECT a FROM Paciente a WHERE nome LIKE :nome");
+         Query query = entityManager.createQuery("SELECT imc FROM IMC imc INNER JOIN imc.paciente pac WHERE pac.nome LIKE :nome");
          query.setParameter("nome", "%" + nome + "%");
 
-         List<Paciente> resultado = query.getResultList();
+         List<IMC> resultado = query.getResultList();
          return resultado;
       }
       catch (Exception e)

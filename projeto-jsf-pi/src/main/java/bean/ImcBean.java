@@ -187,6 +187,29 @@ public class ImcBean
       }
    }
    
+   public void pesquisarPorNome()
+   {
+      try
+      {
+         if (!Util.isCampoNullOrVazio(nomePacientePesquisa))
+         {
+            this.listaResultado = ImcDAO.pesquisarImcPorNomePaciente(this.nomePacientePesquisa.toUpperCase().trim());
+            this.exibirResultadosPesquisa = true;
+         }
+         else
+         {
+            this.listaResultado = ImcDAO.pesquisar();
+            this.exibirResultadosPesquisa = false;
+         }
+
+      }
+      catch (JSFException e)
+      {
+         Util.addMensagemErro("Erro ao pesquisar!. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao pesquisar!.", e);      
+      }
+   }
+   
    
    public void navegarParaAlterar()
    {
