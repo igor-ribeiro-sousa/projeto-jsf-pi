@@ -21,7 +21,7 @@ public class UsuarioDAO
 
       try
       {
-         Query query = entityManager.createQuery("select j from Usuario j");
+         Query query = entityManager.createQuery("SELECT usr FROM Usuario usr");
          List<Usuario> resutado = query.getResultList();
          return resutado;
 
@@ -46,7 +46,7 @@ public class UsuarioDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email");
+         Query query = entityManager.createQuery("SELECT usr FROM Usuario usr WHERE usr.email = :email");
          query.setParameter("email", email);
 
          List<Usuario> resultados = query.getResultList();
@@ -73,7 +73,7 @@ public class UsuarioDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email");
+         Query query = entityManager.createQuery("SELECT usr FROM Usuario usr WHERE usr.email = :email");
          query.setParameter("email", email);
 
          List<Usuario> resultados = query.getResultList();
@@ -102,8 +102,7 @@ public class UsuarioDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Usuario u WHERE " + "(u.nome LIKE :nomeUsuario)");
-
+         Query query = entityManager.createQuery("SELECT usr FROM Usuario usr WHERE usr.nome LIKE :nomeUsuario");
          query.setParameter("nomeUsuario", "%" + nomeUsuario + "%");
 
          List<Usuario> resultado = query.getResultList();
@@ -219,7 +218,7 @@ public class UsuarioDAO
       try
       {
          Query query = entityManager
-               .createQuery("SELECT u FROM Usuario u WHERE u.email = :email AND u.senha = :senha AND u.flagAtivo = 'S'");
+               .createQuery("SELECT usr FROM Usuario usr WHERE usr.email = :email AND usr.senha = :senha AND usr.flagAtivo = 'S'");
          query.setParameter("email", email);
          query.setParameter("senha", senha);
 
@@ -245,7 +244,7 @@ public class UsuarioDAO
       try
       {
          Query query = entityManager
-               .createQuery("SELECT u FROM Usuario u WHERE u.email = :email AND u.dataNascimento = :dataNascimento AND u.flagAtivo = 'S'");
+               .createQuery("SELECT usr FROM Usuario usr WHERE usr.email = :email AND usr.dataNascimento = :dataNascimento AND usr.flagAtivo = 'S'");
          query.setParameter("email", email);
          query.setParameter("dataNascimento", dataNascimento);
 

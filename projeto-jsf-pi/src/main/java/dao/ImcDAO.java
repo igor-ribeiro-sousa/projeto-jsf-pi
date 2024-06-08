@@ -45,7 +45,7 @@ public class ImcDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT imc FROM IMC imc INNER JOIN imc.paciente pac WHERE pac.nome LIKE :nome");
+         Query query = entityManager.createQuery("SELECT imc FROM IMC imc INNER JOIN imc.paciente pct WHERE pct.nome LIKE :nome");
          query.setParameter("nome", "%" + nome + "%");
 
          List<IMC> resultado = query.getResultList();

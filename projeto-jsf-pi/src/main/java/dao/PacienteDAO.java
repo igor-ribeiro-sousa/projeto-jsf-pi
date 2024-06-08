@@ -19,7 +19,7 @@ public class PacienteDAO
 
       try
       {
-         Query query = entityManager.createQuery("select j from Paciente j");
+         Query query = entityManager.createQuery("SELECT pct FROM Paciente pct");
          List<Paciente> resutado = query.getResultList();
          return resutado;
 
@@ -44,7 +44,7 @@ public class PacienteDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT a FROM Paciente a WHERE nome LIKE :nome");
+         Query query = entityManager.createQuery("SELECT pct FROM Paciente pct WHERE nome LIKE :nome");
          query.setParameter("nome", "%" + nome + "%");
 
          List<Paciente> resultado = query.getResultList();
@@ -69,7 +69,7 @@ public class PacienteDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT a FROM Paciente a WHERE cpf LIKE :cpf");
+         Query query = entityManager.createQuery("SELECT pct FROM Paciente pct WHERE pct.cpf LIKE :cpf");
          query.setParameter("cpf", "%" + cpf + "%");
 
          List<Paciente> resultado = query.getResultList();
@@ -130,7 +130,7 @@ public class PacienteDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Paciente u WHERE u.cpf = :cpf");
+         Query query = entityManager.createQuery("SELECT pct FROM Paciente pct WHERE pct.cpf = :cpf");
          query.setParameter("cpf", cpf);
 
          List<Paciente> resultados = query.getResultList();
@@ -156,7 +156,7 @@ public class PacienteDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Paciente u WHERE u.email = :email");
+         Query query = entityManager.createQuery("SELECT pct FROM Paciente pct WHERE pct.email = :email");
          query.setParameter("email", email);
 
          List<Paciente> resultados = query.getResultList();
