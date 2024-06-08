@@ -7,6 +7,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import entidade.Paciente;
+import enuns.StatusAgendamento;
 import exception.JSFException;
 import util.JPAUtilService;
 
@@ -63,16 +64,16 @@ public class PacienteDAO
       }
    }
 
-   public static List<Paciente> pesquisarPorCpfPaciente(String cpf)
+   public static Paciente pesquisarPorCpfPaciente(String cpf)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
       try
       {
-         Query query = entityManager.createQuery("SELECT pct FROM Paciente pct WHERE pct.cpf LIKE :cpf");
-         query.setParameter("cpf", "%" + cpf + "%");
+         Query query = entityManager.createQuery("SELECT pct FROM Paciente pct WHERE pct.cpf = :cpf");
+         query.setParameter("cpf", cpf);
 
-         List<Paciente> resultado = query.getResultList();
+         Paciente resultado = (Paciente) query.getSingleResult();
          return resultado;
       }
       catch (Exception e)
@@ -122,6 +123,31 @@ public class PacienteDAO
    {
       entityManager.persist(paciente);
       return paciente;
+   }
+   
+   public static boolean possuiAgendamentosAgendados(Integer idPaciente)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+      try
+      {
+         Query query = entityManager.createQuery("SELECT COUNT(agd) FROM Agendamento agd WHERE agd.paciente.id = :idPaciente AND agd.status = :statusAgendado");
+         query.setParameter("idPaciente", idPaciente);
+         query.setParameter("statusAgendado", StatusAgendamento.AGENDADO);
+         Long count = (Long) query.getSingleResult();
+         return count > 0;
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
    }
 
    public static boolean existePacientePorCpf(String cpf)

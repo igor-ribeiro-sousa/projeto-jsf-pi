@@ -85,24 +85,15 @@
 
 					<div class="ui-g">
 
-						<div class="ui-g-12">
-							<p:outputLabel for="nomePaciente" value="Nome do Paciente:" />
-							<div class="ui-input-icon-right">
-								<i class="pi pi-user" />
-								<p:inputText id="nomePaciente" style="width: 38rem;"
-									value="#{agendamentoBean.agendamento.nomePaciente}"
-									placeholder="Digite o nome do paciente" />
-							</div>
-						</div>
-
-						<div class="ui-g-12">
-							<p:outputLabel for="email" value="Email:" />
-							<div class="ui-input-icon-right">
-								<i class="pi pi-envelope" />
-								<p:inputText id="email" style="width: 38rem;"
-									value="#{agendamentoBean.agendamento.emailPaciente}"
-									placeholder="Digite seu e-mail" />
-							</div>
+						<div class="ui-g">
+						    <div class="ui-g-12">
+						        <p:outputLabel for="paciente" value="Paciente:" />
+						        <p:selectOneMenu id="paciente" style="width: 38rem;" value="#{agendamentoBean.agendamento.paciente.cpf}">
+						            <f:selectItems value="#{agendamentoBean.pacientesCadastrados}" var="paciente"
+						                itemValue="#{paciente.cpf}"
+						                itemLabel="Paciente: #{paciente.nome} - CPF: 	#{paciente.cpf}" />
+						        </p:selectOneMenu>
+						    </div>
 						</div>
 
 						<div class="ui-g-12">
@@ -114,6 +105,7 @@
 						</div>
 
 						<div class="ui-g-12">
+							<p:outputLabel for="medico" value="Médicos:" />
 							<p:selectOneMenu id="medico" style="width: 38rem;"
 								value="#{agendamentoBean.agendamento.medico.nome}">
 								<f:selectItems value="#{agendamentoBean.medicosCadastrados}"

@@ -75,10 +75,10 @@ public class ImcBean
 
    private void completarPaciente()
    {
-      List<Paciente> pacientes = PacienteDAO.pesquisarPorCpfPaciente(this.imc.getPaciente().getCpf());
-      if (!pacientes.isEmpty())
+      Paciente pacientes = PacienteDAO.pesquisarPorCpfPaciente(this.imc.getPaciente().getCpf());
+      if (Objects.nonNull(pacientes))
       {
-         this.imc.setCodigoPaciente(pacientes.get(0).getId());
+         this.imc.setCodigoPaciente(pacientes.getId());
          this.imc.setPaciente(null);
       }
    }

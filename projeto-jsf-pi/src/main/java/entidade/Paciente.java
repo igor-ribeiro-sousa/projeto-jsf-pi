@@ -1,7 +1,10 @@
 package entidade;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,6 +51,12 @@ public class Paciente
    @Column(name = "DT_INC", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
    private Date dataInclusao;
+   
+   @OneToMany(mappedBy = "paciente", cascade = CascadeType.REMOVE)
+   private List<IMC> imcs = new ArrayList<IMC>();
+   
+   @OneToMany(mappedBy = "paciente", cascade = CascadeType.REMOVE)
+   private List<Agendamento> agendamentos = new ArrayList<Agendamento>();
 
    public Integer getId()
    {
@@ -126,5 +136,25 @@ public class Paciente
    public void setDataInclusao(Date dataInclusao)
    {
       this.dataInclusao = dataInclusao;
+   }
+
+   public List<IMC> getImcs()
+   {
+      return imcs;
+   }
+
+   public void setImcs(List<IMC> imcs)
+   {
+      this.imcs = imcs;
+   }
+
+   public List<Agendamento> getAgendamentos()
+   {
+      return agendamentos;
+   }
+
+   public void setAgendamentos(List<Agendamento> agendamentos)
+   {
+      this.agendamentos = agendamentos;
    }
 }

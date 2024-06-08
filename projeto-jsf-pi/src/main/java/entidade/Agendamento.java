@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,18 +29,19 @@ public class Agendamento
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @Column(name = "NM_PCT", nullable = false)
-   private String nomePaciente;
+   @Column(name = "CD_PCT", nullable = false)
+   private Integer codigoPaciente;
+
+   @OneToOne
+   @JoinColumn(name = "CD_PCT", insertable = false, updatable = false)
+   private Paciente paciente;
 
    @Column(name = "CD_MDC", nullable = false)
    private Integer codigoMedico;
-   
+
    @ManyToOne
    @JoinColumn(name = "CD_MDC", insertable = false, updatable = false)
    private Medico medico;
-
-   @Column(name = "EM_PCT", nullable = false)
-   private String emailPaciente;
 
    @Column(name = "ST_AGD", nullable = false)
    @Enumerated(EnumType.STRING)
@@ -67,14 +69,24 @@ public class Agendamento
       this.id = id;
    }
 
-   public String getNomePaciente()
+   public Integer getCodigoPaciente()
    {
-      return nomePaciente;
+      return codigoPaciente;
    }
 
-   public void setNomePaciente(String nomePaciente)
+   public void setCodigoPaciente(Integer codigoPaciente)
    {
-      this.nomePaciente = nomePaciente;
+      this.codigoPaciente = codigoPaciente;
+   }
+
+   public Paciente getPaciente()
+   {
+      return paciente;
+   }
+
+   public void setPaciente(Paciente paciente)
+   {
+      this.paciente = paciente;
    }
 
    public Integer getCodigoMedico()
@@ -95,16 +107,6 @@ public class Agendamento
    public void setMedico(Medico medico)
    {
       this.medico = medico;
-   }
-
-   public String getEmailPaciente()
-   {
-      return emailPaciente;
-   }
-
-   public void setEmailPaciente(String emailPaciente)
-   {
-      this.emailPaciente = emailPaciente;
    }
 
    public StatusAgendamento getStatus()

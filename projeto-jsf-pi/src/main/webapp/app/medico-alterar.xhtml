@@ -55,13 +55,28 @@
 					</p:messages>
 
 					<div class="ui-g">
-						<span class="ui-input-icon-left ui-g-7"> <p:outputLabel
-								value="Nome Médico" /> <i class="pi pi-user"
-							style="margin-top: 8px; margin-left: 8px; transform: translateY(-50%);" />
-							<p:inputText placeholder="Digite o nome do médico" id="sfd"
-								style="width: 100%;" value="#{medicoBean.medico.nome}" />
-						</span>
-
+						<div class="ui-g-12">
+							<span class="ui-input-icon-left ui-g-12">
+							<p:outputLabel value="Nome Médico" /> 
+							<i class="pi pi-user" style="margin-top: 8px; margin-left: 8px; transform: translateY(-50%);" />
+								<p:inputText placeholder="Digite o nome do médico" id="nome"
+									style="width: 100%;" value="#{medicoBean.medico.nome}" />
+							</span>
+						</div>
+					</div>
+						
+					<div class="ui-g">
+						<div class="ui-g-12">
+							<span class="ui-input-icon-left ui-g-12">
+							<p:outputLabel value="CRM Médico" /> 
+							<i class="pi pi-id-card" style="margin-top: 8px; margin-left: 8px; transform: translateY(-50%);" />
+								<p:inputText placeholder="Digite o CRM do médico" id="crm"
+									style="width: 100%;" value="#{medicoBean.medico.crm}" />
+							</span>
+						</div>
+					</div>
+					
+					<div class="ui-g">
 						<div class="ui-g-4">
 							<p:outputLabel value="Situação" />
 							<p:selectOneRadio id="line"
@@ -73,7 +88,7 @@
 					</div>
 
 					<div class="ui-g-12">
-						<div style="display: flex; gap: 10px;">
+						<div style="display: flex; justify-content: flex-end; gap: 10px;">
 							<p:commandButton value="Voltar"
 								actionListener="#{medicoBean.navegarParaPesquisar}"
 								styleClass="ui-button-secondary" update="contentPanel" />

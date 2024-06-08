@@ -22,6 +22,7 @@ public class PacienteBean
 {
    private Paciente paciente;
    private String cpf;
+   private String emailOriginal;
    private String nomePacientePesquisa;
    private List<Paciente> pacientes;
    private List<Paciente> listaResultado;
@@ -129,6 +130,7 @@ public class PacienteBean
       {
          this.paciente = paciente;
          this.cpf = paciente.getCpf();
+         this.emailOriginal = paciente.getEmail();
          navegarParaAlterar();
       }
       catch (Exception e)
@@ -142,14 +144,22 @@ public class PacienteBean
    {
       try
       {
-         PacienteDAO.excluir(id);
-         Util.addMensagemWarn("Paciente excluído !");
+         if (!PacienteDAO.possuiAgendamentosAgendados(id))
+         {
+            PacienteDAO.excluir(id);
+            Util.addMensagemWarn("Paciente excluído com sucesso!");
+         }
+         else
+         {
+            Util.addMensagemErro("Este paciente possui agendamentos para realizar e não pode ser excluído. "
+                  + "Por favor, remova todos os agendamentos associados a ele e tente novamente.");
+         }
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro ao tentar excluir paciente. Por favor, tente novamente mais tarde.");
-         throw new JSFException("Erro ao tentar excluir paciente", e);        
-      }
+         Util.addMensagemErro("Erro ao tentar excluir o paciente. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar excluir o paciente.", e);        }
+
    }
    
    public void navegarParaAlterar()
@@ -286,7 +296,7 @@ public class PacienteBean
          return false;
       }
       
-      if (existePacientePorEmail(paciente.getEmail().trim()))
+      if (existePacientePorEmail(paciente.getEmail().trim()) && !paciente.getEmail().equalsIgnoreCase(this.emailOriginal.trim()))
       {
          Util.addMensagemErro("E-mail já cadastrado");
          return false;
