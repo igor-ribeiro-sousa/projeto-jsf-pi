@@ -8,7 +8,7 @@ import javax.faces.bean.SessionScoped;
 public class NavegacaoBean
 {
 
-   private String currentPage = "home.xhtml"; 
+   private String currentPage = "home.xhtml";
 
    public String getCurrentPage()
    {

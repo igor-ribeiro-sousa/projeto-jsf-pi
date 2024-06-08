@@ -1,6 +1,5 @@
 package dao;
 
-import java.io.ObjectInputFilter.Status;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import entidade.Agendamento;
-import entidade.Medico;
 import enuns.StatusAgendamento;
 import exception.JSFException;
 import util.JPAUtilService;
@@ -23,7 +21,7 @@ public class AgendamentoDAO
 
       try
       {
-         Query query = entityManager.createQuery("select j from Agendamento j");
+         Query query = entityManager.createQuery("SELECT agd FROM Agendamento agd");
          List<Agendamento> resutado = query.getResultList();
          return resutado;
 
@@ -48,7 +46,7 @@ public class AgendamentoDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT a FROM Agendamento a WHERE a.medico.nome LIKE :nomeMedico");
+         Query query = entityManager.createQuery("SELECT agd FROM Agendamento agd WHERE agd.medico.nome LIKE :nomeMedico");
          query.setParameter("nomeMedico", "%" + nomeMedico + "%");
 
          List<Agendamento> resultado = query.getResultList();
@@ -107,7 +105,7 @@ public class AgendamentoDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Agendamento u WHERE u.emailPaciente = :email");
+         Query query = entityManager.createQuery("SELECT agd FROM Agendamento agd WHERE agd.emailPaciente = :email");
          query.setParameter("email", email);
 
          List<Agendamento> resultados = query.getResultList();
@@ -134,7 +132,10 @@ public class AgendamentoDAO
       try
       {
          Query query = entityManager.createQuery(
-               "SELECT COUNT(a) FROM Agendamento a INNER JOIN a.medico m WHERE a.dataHoraAgendamento = :dataAgendamento AND m.nome = :nomeMedico AND a.status = :status");
+               "SELECT COUNT(agd) FROM Agendamento agd INNER JOIN agd.medico mdc " +
+               "WHERE agd.dataHoraAgendamento = :dataAgendamento " +
+               "AND mdc.nome = :nomeMedico AND agd.status = :status");
+         
          query.setParameter("dataAgendamento", dataAgendamento);
          query.setParameter("nomeMedico", nomeMedico);
          query.setParameter("status", StatusAgendamento.AGENDADO);

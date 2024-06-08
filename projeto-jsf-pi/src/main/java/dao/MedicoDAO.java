@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import entidade.Agendamento;
 import entidade.Medico;
 import entidade.Usuario;
 import enuns.StatusAgendamento;
@@ -21,7 +22,7 @@ public class MedicoDAO
 
       try
       {
-         Query query = entityManager.createQuery("select j from Medico j");
+         Query query = entityManager.createQuery("SELECT mdc FROM Medico mdc");
          List<Medico> resutado = query.getResultList();
          return resutado;
 
@@ -46,8 +47,7 @@ public class MedicoDAO
 
       try
       {
-         Query query = entityManager.createQuery("SELECT u FROM Medico u WHERE " + "(u.nome LIKE :nomeMedico)");
-
+         Query query = entityManager.createQuery("SELECT mdc FROM Medico mdc WHERE mdc.nome LIKE :nomeMedico");
          query.setParameter("nomeMedico", "%" + nomeMedico + "%");
 
          List<Medico> resultado = query.getResultList();
@@ -135,15 +135,41 @@ public class MedicoDAO
    {
       return entityManager.merge(medico);
    }
+   
+   public static boolean existeMedicoPorCrm(String crm)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
-   public static boolean possuiAgendamentos(Integer idMedico)
+      try
+      {
+         Query query = entityManager.createQuery("SELECT mdc FROM Medico mdc WHERE mdc.crm = :crm");
+         query.setParameter("crm", crm);
+
+         List<Agendamento> resultados = query.getResultList();
+         return !resultados.isEmpty();
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+   }
+
+   public static boolean possuiAgendamentosAgendados(Integer idMedico)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       try
       {
-         Query query = entityManager
-               .createQuery("SELECT COUNT(a) FROM Agendamento a WHERE a.medico.id = :idMedico");
+         Query query = entityManager.createQuery("SELECT COUNT(agd) FROM Agendamento agd WHERE agd.medico.id = :idMedico AND agd.status = :statusAgendado");
          query.setParameter("idMedico", idMedico);
+         query.setParameter("statusAgendado", StatusAgendamento.AGENDADO);
          Long count = (Long) query.getSingleResult();
          return count > 0;
       }

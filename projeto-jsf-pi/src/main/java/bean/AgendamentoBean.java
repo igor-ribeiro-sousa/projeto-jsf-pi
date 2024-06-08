@@ -20,8 +20,10 @@ import javax.mail.internet.MimeMessage;
 
 import dao.AgendamentoDAO;
 import dao.MedicoDAO;
+import dao.PacienteDAO;
 import entidade.Agendamento;
 import entidade.Medico;
+import entidade.Paciente;
 import enuns.Clinica;
 import enuns.StatusAgendamento;
 import exception.JSFException;
@@ -34,6 +36,7 @@ public class AgendamentoBean
    private Agendamento agendamento;
    private String nomeMedicoPesquisa;
    private Date dataAgendamentoAtual;
+   private List<Paciente> pacientesCadastrados;
    private List<Medico> medicosCadastrados;
    private List<Agendamento> agendamentos;
    private List<Agendamento> listaResultado;
@@ -46,6 +49,7 @@ public class AgendamentoBean
    {
       this.agendamento = new Agendamento();
       this.agendamento.setMedico(new Medico());
+      this.agendamento.setPaciente(new Paciente());
       this.agendamentos = new ArrayList<Agendamento>();
       this.listaResultado = new ArrayList<Agendamento>();
       this.exibirResultadosPesquisa = false;
@@ -55,6 +59,7 @@ public class AgendamentoBean
    {
       try
       {
+         this.agendamento.setPaciente(PacienteDAO.pesquisarPorCpfPaciente(this.agendamento.getPaciente().getCpf()));
          if (validarInserir())
          {
             completarInserir();
@@ -75,8 +80,8 @@ public class AgendamentoBean
    
    public void agendarLogado()
    {
-      try
-      {
+      try {
+         this.agendamento.setPaciente(PacienteDAO.pesquisarPorCpfPaciente(this.agendamento.getPaciente().getCpf()));
          if (validarInserir())
          {
             completarInserir();
@@ -94,23 +99,9 @@ public class AgendamentoBean
       }
    }
    
-   public void navegarParaPesquisar()
-   {
-      this.agendamento = new Agendamento();
-      this.agendamento.setMedico(new Medico());      
-      navegacaoBean.setCurrentPage("agendamento-pesquisar.xhtml");
-   }
-   
-   private void atualizaAgendamento()
-   {
-      this.agendamento = new Agendamento();
-      this.agendamento.setMedico(new Medico());      
-   }
-
    public void completarInserir()
    {
-      this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
-      this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
+      completarPaciente();
       completarMedico();
       this.agendamento.setDataInclusao(new Date());
       this.agendamento.setStatus(StatusAgendamento.AGENDADO);
@@ -138,10 +129,19 @@ public class AgendamentoBean
 
    public void completarAlterar()
    {
-      this.agendamento.setNomePaciente(this.agendamento.getNomePaciente().toUpperCase().trim());
-      this.agendamento.setEmailPaciente(this.agendamento.getEmailPaciente().toUpperCase().trim());
       this.agendamento.setStatus(StatusAgendamento.AGENDADO);
+      completarPaciente();
       completarMedico();
+   }
+   
+   private void completarPaciente()
+   {
+      Paciente pacientes = PacienteDAO.pesquisarPorCpfPaciente(this.agendamento.getPaciente().getCpf());
+      if (Objects.nonNull(pacientes))
+      {
+         this.agendamento.setCodigoPaciente(pacientes.getId());
+         this.agendamento.setPaciente(null);
+      }
    }
    
    private void completarMedico() 
@@ -270,9 +270,9 @@ public class AgendamentoBean
       {
          Message message = new MimeMessage(session);
          message.setFrom(new InternetAddress(remetente));
-         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(agendamento.getEmailPaciente()));
+         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(agendamento.getPaciente().getEmail()));
          message.setSubject("Cancelamento de agendamento");
-         String corpoEmail = "OLÁ SR./SRA. " + agendamento.getNomePaciente() + ",\n\n"
+         String corpoEmail = "OLÁ SR./SRA. " + agendamento.getPaciente().getNome() + ",\n\n"
                + "SEU AGENDAMENTO DE NÚMERO " + agendamento.getId() + "\n"
                + "NA CLÍNICA: " + agendamento.getClinica() + "\n"
                + "PARA O DIA " + new SimpleDateFormat("dd/MM/yyyy").format(agendamento.getDataHoraAgendamento()) + "\n"
@@ -293,6 +293,19 @@ public class AgendamentoBean
       }
    }
    
+   public void navegarParaPesquisar()
+   {
+      atualizaAgendamento();
+      navegacaoBean.setCurrentPage("agendamento-pesquisar.xhtml");
+   }
+   
+   private void atualizaAgendamento()
+   {
+      this.agendamento = new Agendamento();
+      this.agendamento.setMedico(new Medico());   
+      this.agendamento.setPaciente(new Paciente());
+   }
+   
    public void navegarParaAlterar()
    {
       navegacaoBean.setCurrentPage("agendamento-alterar.xhtml");
@@ -311,19 +324,19 @@ public class AgendamentoBean
    
    private boolean validarInserir()
    {
-      if (Util.isCampoNullOrVazio(agendamento.getNomePaciente()))
+      if (Util.isCampoNullOrVazio(agendamento.getPaciente().getNome()))
       {
          Util.addMensagemErro("Nome do paciente obrigatório.");
          return false;
       }
 
-      if (Util.isCampoNullOrVazio(agendamento.getEmailPaciente()))
+      if (Util.isCampoNullOrVazio(agendamento.getPaciente().getEmail()))
       {
          Util.addMensagemErro("E-mail obrigatório.");
          return false;
       }
 
-      if (!Util.validarEmail(agendamento.getEmailPaciente().trim()))
+      if (!Util.validarEmail(agendamento.getPaciente().getEmail().trim()))
       {
          Util.addMensagemErro("E-mail inválido.");
          return false;
@@ -364,19 +377,19 @@ public class AgendamentoBean
    
    private boolean validarAlterar()
    {
-      if (Util.isCampoNullOrVazio(agendamento.getNomePaciente()))
+      if (Util.isCampoNullOrVazio(agendamento.getPaciente().getEmail()))
       {
          Util.addMensagemErro("Nome do paciente obrigatório.");
          return false;
       }
 
-      if (Util.isCampoNullOrVazio(agendamento.getEmailPaciente()))
+      if (Util.isCampoNullOrVazio(agendamento.getPaciente().getEmail()))
       {
          Util.addMensagemErro("E-mail obrigatório.");
          return false;
       }
 
-      if (!Util.validarEmail(agendamento.getEmailPaciente().trim()))
+      if (!Util.validarEmail(agendamento.getPaciente().getEmail().trim()))
       {
          Util.addMensagemErro("E-mail inválido.");
          return false;
@@ -432,10 +445,16 @@ public class AgendamentoBean
    {
       return nomeMedicoPesquisa;
    }
-
+   
    public void setNomeMedicoPesquisa(String nomeMedicoPesquisa)
    {
       this.nomeMedicoPesquisa = nomeMedicoPesquisa;
+   }
+   
+   public List<Paciente> getPacientesCadastrados()
+   {
+      pacientesCadastrados = PacienteDAO.pesquisar();
+      return pacientesCadastrados;
    }
 
    public List<Medico> getMedicosCadastrados()

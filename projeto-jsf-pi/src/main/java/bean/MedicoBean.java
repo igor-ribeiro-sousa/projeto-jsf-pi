@@ -19,6 +19,7 @@ public class MedicoBean
 {
    private Medico medico;
    private String nomeMedicoPesquisa;
+   private String crm;
    private List<Medico> medicos;
    private List<Medico> listaResultado;
    private boolean exibirResultadosPesquisa;
@@ -91,27 +92,27 @@ public class MedicoBean
       try
       {
          this.medico = medico;
+         this.crm = medico.getCrm();
          navegarParaAlterar();
       }
       catch (Exception e)
       {
          Util.addMensagemErro("Erro inesperado!");
          throw new JSFException(e.getMessage());        }
-
    }
 
    public void deletar(Integer id)
    {
       try
       {
-         if (!MedicoDAO.possuiAgendamentos(id))
+         if (!MedicoDAO.possuiAgendamentosAgendados(id))
          {
             MedicoDAO.excluir(id);
             Util.addMensagemWarn("Médico excluído com sucesso!");
          }
          else
          {
-            Util.addMensagemErro("Este médico possui agendamentos e não pode ser excluído. "
+            Util.addMensagemErro("Este médico possui agendamentos para realizar e não pode ser excluído. "
                   + "Por favor, remova todos os agendamentos associados a ele e tente novamente.");
          }
       }
@@ -120,6 +121,19 @@ public class MedicoBean
          Util.addMensagemErro("Erro ao tentar excluir o médico. Por favor, tente novamente mais tarde.");
          throw new JSFException("Erro ao tentar excluir o médico.", e);        }
 
+   }
+   
+   public boolean existeMedicoPorCrm(String crm)
+   {
+      try
+      {
+         return MedicoDAO.existeMedicoPorCrm(crm.toUpperCase().trim());
+      }
+      catch (JSFException e)
+      {
+         Util.addMensagemErro("Erro ao verificar a existência do médico. Por favor, tente novamente mais tarde.");
+         return false;
+      }
    }
    
    public void pesquisarPorNome()
@@ -163,6 +177,18 @@ public class MedicoBean
          Util.addMensagemErro("Nome do médico é obrigatório");
          return false;
       }
+      
+      if (Util.isCampoNullOrVazio(medico.getCrm()))
+      {
+         Util.addMensagemErro("CRM do médico é obrigatório");
+         return false;
+      }
+      
+      if (existeMedicoPorCrm(medico.getCrm()))
+      {
+         Util.addMensagemErro("Médico já cadastrado com esse CRM.");
+         return false;
+      }
       return true;
    }
    
@@ -171,6 +197,17 @@ public class MedicoBean
       if (Util.isCampoNullOrVazio(medico.getNome()))
       {
          Util.addMensagemErro("Nome do médico é obrigatório");
+         return false;
+      }
+      if (Util.isCampoNullOrVazio(medico.getCrm()))
+      {
+         Util.addMensagemErro("CRM do médico é obrigatório");
+         return false;
+      }
+      
+      if (existeMedicoPorCrm(medico.getCrm().trim()) && !medico.getCrm().equalsIgnoreCase(this.crm.trim()))
+      {
+         Util.addMensagemErro("Médico já cadastrado com esse CRM.");
          return false;
       }
       return true;
