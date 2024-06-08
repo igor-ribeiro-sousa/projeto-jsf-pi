@@ -22,7 +22,7 @@ public class IMC
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @Column(name = "CD_PCT", unique = true, nullable = false)
+   @Column(name = "CD_PCT", nullable = false)
    private Integer codigoPaciente;
 
    @OneToOne
@@ -36,7 +36,10 @@ public class IMC
    private Double alturaPaciente;
 
    @Column(name = "RT_IMC", nullable = false)
-   private String resultado;
+   private Double resultadoImc;
+
+   @Column(name = "CL_IMC", nullable = false)
+   private String classificacao;
 
    @Column(name = "DT_INC", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
@@ -92,14 +95,24 @@ public class IMC
       this.alturaPaciente = alturaPaciente;
    }
 
-   public String getResultado()
+   public Double getResultadoImc()
    {
-      return resultado;
+      return resultadoImc;
    }
 
-   public void setResultado(String resultado)
+   public void setResultadoImc(Double resultadoImc)
    {
-      this.resultado = resultado;
+      this.resultadoImc = resultadoImc;
+   }
+
+   public String getClassificacao()
+   {
+      return classificacao;
+   }
+
+   public void setClassificacao(String classificacao)
+   {
+      this.classificacao = classificacao;
    }
 
    public Date getDataInclusao()
@@ -111,5 +124,4 @@ public class IMC
    {
       this.dataInclusao = dataInclusao;
    }
-
 }

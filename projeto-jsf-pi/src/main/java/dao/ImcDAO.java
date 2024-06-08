@@ -6,27 +6,28 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import entidade.IMC;
 import entidade.Paciente;
 import exception.JSFException;
 import util.JPAUtilService;
 
-public class PacienteDAO
+public class ImcDAO
 {
 
-   public static List<Paciente> pesquisar()
+   public static List<IMC> pesquisar()
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
       try
       {
-         Query query = entityManager.createQuery("select j from Paciente j");
-         List<Paciente> resutado = query.getResultList();
+         Query query = entityManager.createQuery("select j from IMC j");
+         List<IMC> resutado = query.getResultList();
          return resutado;
 
       }
       catch (Exception e)
       {
-         throw new JSFException("Erro ao pesquisar paciente: " + e.getMessage());
+         throw new JSFException("Erro ao pesquisar IMC: " + e.getMessage());
 
       }
       finally
@@ -63,7 +64,7 @@ public class PacienteDAO
       }
    }
 
-   public static Paciente inserir(Paciente paciente)
+   public static IMC inserir(IMC imc)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       EntityTransaction transaction = entityManager.getTransaction();
@@ -71,9 +72,9 @@ public class PacienteDAO
       try
       {
          transaction.begin();
-         paciente = inserir(paciente, entityManager);
+         imc = inserir(imc, entityManager);
          transaction.commit();
-         return paciente;
+         return imc;
 
       }
       catch (Exception e)
@@ -82,7 +83,7 @@ public class PacienteDAO
          {
             transaction.rollback();
          }
-         throw new JSFException("Erro ao salvar a paciente: " + e.getMessage());
+         throw new JSFException("Erro ao salvar imc: " + e.getMessage());
       }
       finally
       {
@@ -93,39 +94,14 @@ public class PacienteDAO
       }
    }
 
-   private static Paciente inserir(Paciente paciente, EntityManager entityManager)
+   private static IMC inserir(IMC imc, EntityManager entityManager)
    {
-      entityManager.persist(paciente);
-      return paciente;
+      entityManager.persist(imc);
+      return imc;
    }
 
-   public static boolean existePacientePorCpf(String cpf)
-   {
-      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
 
-      try
-      {
-         Query query = entityManager.createQuery("SELECT u FROM Paciente u WHERE u.cpf = :cpf");
-         query.setParameter("cpf", cpf);
-
-         List<Paciente> resultados = query.getResultList();
-         return !resultados.isEmpty();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-         return false;
-      }
-      finally
-      {
-         if (entityManager != null && entityManager.isOpen())
-         {
-            entityManager.close();
-         }
-      }
-   }
-
-   public static Paciente alterar(Paciente paciente)
+   public static IMC alterar(IMC imc)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
       EntityTransaction transaction = entityManager.getTransaction();
@@ -133,9 +109,9 @@ public class PacienteDAO
       try
       {
          transaction.begin();
-         paciente = alterar(paciente, entityManager);
+         imc = alterar(imc, entityManager);
          transaction.commit();
-         return paciente;
+         return imc;
       }
       catch (Exception e)
       {
@@ -143,7 +119,7 @@ public class PacienteDAO
          {
             transaction.rollback();
          }
-         throw new JSFException("Erro ao alterar paciente: " + e.getMessage());
+         throw new JSFException("Erro ao alterar imc: " + e.getMessage());
       }
       finally
       {
@@ -154,9 +130,9 @@ public class PacienteDAO
       }
    }
 
-   private static Paciente alterar(Paciente paciente, EntityManager entityManager)
+   private static IMC alterar(IMC imc, EntityManager entityManager)
    {
-      return entityManager.merge(paciente);
+      return entityManager.merge(imc);
    }
 
    public static void excluir(Integer id)
@@ -167,11 +143,11 @@ public class PacienteDAO
       try
       {
          transaction.begin();
-         Paciente paciente = entityManager.find(Paciente.class, id);
-         if (paciente != null)
+         IMC imc = entityManager.find(IMC.class, id);
+         if (imc != null)
          {
-            paciente = entityManager.merge(paciente);
-            excluir(paciente, entityManager);
+            imc = entityManager.merge(imc);
+            excluir(imc, entityManager);
          }
          transaction.commit();
 
@@ -182,7 +158,7 @@ public class PacienteDAO
          {
             transaction.rollback();
          }
-         throw new JSFException("Erro ao excluir a paciente: " + e.getMessage());
+         throw new JSFException("Erro ao excluir IMC: " + e.getMessage());
       }
       finally
       {
@@ -193,8 +169,8 @@ public class PacienteDAO
       }
    }
 
-   private static void excluir(Paciente paciente, EntityManager entityManager)
+   private static void excluir(IMC imc, EntityManager entityManager)
    {
-      entityManager.remove(paciente);
+      entityManager.remove(imc);
    }
 }
