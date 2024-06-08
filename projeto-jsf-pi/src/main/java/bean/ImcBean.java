@@ -53,7 +53,6 @@ public class ImcBean
          if (validarInserir())
          {
             completarInserir();
-            calcularImc();
             ImcDAO.inserir(imc);
             Util.addMensagemInfo("IMC calculado com sucesso!");
             navegarParaPesquisar();
@@ -71,11 +70,12 @@ public class ImcBean
    {
       this.imc.setDataInclusao(new Date());
       completarPaciente();
+      calcularImc();
    }
 
    private void completarPaciente()
    {
-      List<Paciente> pacientes = PacienteDAO.pesquisarPorPaciente(this.imc.getPaciente().getNome().toUpperCase().trim());
+      List<Paciente> pacientes = PacienteDAO.pesquisarPorCpfPaciente(this.imc.getPaciente().getCpf());
       if (!pacientes.isEmpty())
       {
          this.imc.setCodigoPaciente(pacientes.get(0).getId());
@@ -83,6 +83,45 @@ public class ImcBean
       }
    }
 
+   public void alterar()
+   {
+      try
+      {
+         if (validarAlterar())
+         {
+            completarAlterar();
+            this.imc = ImcDAO.alterar(imc);
+            Util.addMensagemInfo("IMC alterado com sucesso!.");
+            navegarParaPesquisar();
+         }
+
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro ao tentar alterar o médico. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar alterar o médico." , e);
+      }
+   }
+
+   public void completarAlterar()
+   {
+      completarPaciente();
+      calcularImc();
+   }
+   
+   public void editar(IMC imc)
+   {
+      try
+      {
+         this.imc = imc;
+         navegarParaAlterar();
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         throw new JSFException(e.getMessage());        }
+   }
+   
    private void calcularImc()
    {
       double peso = this.imc.getPesoPaciente();
@@ -133,6 +172,26 @@ public class ImcBean
 
       this.imc.setClassificacao(classificacao);
    }
+   
+   public void deletar(Integer id)
+   {
+      try
+      {
+         ImcDAO.excluir(id);
+         Util.addMensagemWarn("Imc excluído !");
+      }
+      catch (Exception e)
+      {
+         Util.addMensagemErro("Erro ao tentar excluir IMC. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar excluir IMC", e);        
+      }
+   }
+   
+   
+   public void navegarParaAlterar()
+   {
+      navegacaoBean.setCurrentPage("imc-alterar.xhtml");
+   }
 
    public void navegarParaPesquisar()
    {
@@ -143,9 +202,32 @@ public class ImcBean
 
    private boolean validarInserir()
    {
-      if (Util.isCampoNullOrVazio(imc.getPaciente().getNome()))
+      if (Util.isCampoNullOrVazio(imc.getPaciente().getCpf()))
       {
-         Util.addMensagemErro("Nome paciente obrigatório.");
+         Util.addMensagemErro("Paciente obrigatório.");
+         return false;
+      }
+
+      if (Objects.isNull(imc.getPesoPaciente()))
+      {
+         Util.addMensagemErro("Peso do paciente obrigatória.");
+         return false;
+      }
+
+      if (Objects.isNull(imc.getAlturaPaciente()))
+      {
+         Util.addMensagemErro("Altura do paciente obrigatória.");
+         return false;
+      }
+
+      return true;
+   }
+   
+   private boolean validarAlterar()
+   {
+      if (Util.isCampoNullOrVazio(imc.getPaciente().getCpf()))
+      {
+         Util.addMensagemErro("Paciente obrigatório.");
          return false;
       }
 

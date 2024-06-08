@@ -30,7 +30,7 @@ public class Paciente
    @Column(name = "NM_PCT", nullable = false)
    private String nome;
    
-   @Column(name = "EM_PCT", nullable = false)
+   @Column(name = "EM_PCT", unique = true, nullable = false)
    private String email;
    
    @Column(name = "SX_PCT", nullable = false)

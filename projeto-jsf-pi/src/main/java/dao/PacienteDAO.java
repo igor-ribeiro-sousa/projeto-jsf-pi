@@ -63,6 +63,31 @@ public class PacienteDAO
       }
    }
 
+   public static List<Paciente> pesquisarPorCpfPaciente(String cpf)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+
+      try
+      {
+         Query query = entityManager.createQuery("SELECT a FROM Paciente a WHERE cpf LIKE :cpf");
+         query.setParameter("cpf", "%" + cpf + "%");
+
+         List<Paciente> resultado = query.getResultList();
+         return resultado;
+      }
+      catch (Exception e)
+      {
+         return null;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+   }
+   
    public static Paciente inserir(Paciente paciente)
    {
       EntityManager entityManager = JPAUtilService.fabricarEntityManager();
@@ -107,6 +132,32 @@ public class PacienteDAO
       {
          Query query = entityManager.createQuery("SELECT u FROM Paciente u WHERE u.cpf = :cpf");
          query.setParameter("cpf", cpf);
+
+         List<Paciente> resultados = query.getResultList();
+         return !resultados.isEmpty();
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return false;
+      }
+      finally
+      {
+         if (entityManager != null && entityManager.isOpen())
+         {
+            entityManager.close();
+         }
+      }
+   }
+   
+   public static boolean existePacientePorEmail(String email)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+
+      try
+      {
+         Query query = entityManager.createQuery("SELECT u FROM Paciente u WHERE u.email = :email");
+         query.setParameter("email", email);
 
          List<Paciente> resultados = query.getResultList();
          return !resultados.isEmpty();

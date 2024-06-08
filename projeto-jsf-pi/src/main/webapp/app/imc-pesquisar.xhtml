@@ -70,8 +70,8 @@
 				        <h:outputText value="#{item.paciente.nome}" title="#{item.paciente.nome}"/>
 				    </p:column>
 				    
-				    <p:column headerText="E-mail do Paciente" style="text-align: center; cursor: pointer;">
-				        <h:outputText value="#{item.paciente.email}" title="#{item.paciente.email}"/>
+				    <p:column headerText="CPF do Paciente" style="text-align: center; cursor: pointer;">
+				        <h:outputText value="#{item.paciente.cpf}" title="#{item.paciente.cpf}"/>
 				    </p:column>
 				    
 				    <p:column headerText="Peso do Paciente" style="text-align: center; cursor: pointer;">
@@ -107,7 +107,9 @@
 				            styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only edit-button rounded-button ui-button-success"
 				            update="contentPanel" type="submit">
 				        </p:commandButton>
-				
+				        
+				        <span style="margin-left: 0.5px;"></span>
+				        
 				        <p:commandButton action="#{imcBean.deletar(item.id)}"
 				            icon="pi pi-trash" title="Deletar"
 				            styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-button-warning rounded-button"

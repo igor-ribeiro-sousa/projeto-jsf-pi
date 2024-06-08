@@ -147,8 +147,8 @@ public class PacienteBean
       }
       catch (Exception e)
       {
-         Util.addMensagemErro("Erro ao tentar exluir paciente. Por favor, tente novamente mais tarde.");
-         throw new JSFException("Erro ao tentar exluir paciente", e);        
+         Util.addMensagemErro("Erro ao tentar excluir paciente. Por favor, tente novamente mais tarde.");
+         throw new JSFException("Erro ao tentar excluir paciente", e);        
       }
    }
    
@@ -162,6 +162,19 @@ public class PacienteBean
       try
       {
          return PacienteDAO.existePacientePorCpf(cpf);
+      }
+      catch (JSFException e)
+      {
+         Util.addMensagemErro("Erro inesperado!");
+         return false;
+      }
+   }
+   
+   public boolean existePacientePorEmail(String email)
+   {
+      try
+      {
+         return PacienteDAO.existePacientePorEmail(email.toUpperCase().trim());
       }
       catch (JSFException e)
       {
@@ -211,6 +224,12 @@ public class PacienteBean
       if (!Util.validarEmail(paciente.getEmail().trim()))
       {
          Util.addMensagemErro("E-mail inválido");
+         return false;
+      }
+      
+      if (existePacientePorEmail(paciente.getEmail().trim()))
+      {
+         Util.addMensagemErro("E-mail já cadastrado");
          return false;
       }
 
@@ -264,6 +283,12 @@ public class PacienteBean
       if (!Util.validarEmail(paciente.getEmail().trim()))
       {
          Util.addMensagemErro("E-mail inválido");
+         return false;
+      }
+      
+      if (existePacientePorEmail(paciente.getEmail().trim()))
+      {
+         Util.addMensagemErro("E-mail já cadastrado");
          return false;
       }
 
