@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import enuns.ResultadoIMC;
 
 @Entity
 @Table(name = "TBL_IMC")
@@ -34,12 +38,10 @@ public class IMC
 
    @Column(name = "AT_PCT", nullable = false)
    private Double alturaPaciente;
-
+   
    @Column(name = "RT_IMC", nullable = false)
-   private Double resultadoImc;
-
-   @Column(name = "CL_IMC", nullable = false)
-   private String classificacao;
+   @Enumerated(EnumType.STRING)
+   private ResultadoIMC resultadoImc;
 
    @Column(name = "DT_INC", nullable = false)
    @Temporal(TemporalType.TIMESTAMP)
@@ -95,24 +97,14 @@ public class IMC
       this.alturaPaciente = alturaPaciente;
    }
 
-   public Double getResultadoImc()
+   public ResultadoIMC getResultadoImc()
    {
       return resultadoImc;
    }
 
-   public void setResultadoImc(Double resultadoImc)
+   public void setResultadoImc(ResultadoIMC resultadoImc)
    {
       this.resultadoImc = resultadoImc;
-   }
-
-   public String getClassificacao()
-   {
-      return classificacao;
-   }
-
-   public void setClassificacao(String classificacao)
-   {
-      this.classificacao = classificacao;
    }
 
    public Date getDataInclusao()

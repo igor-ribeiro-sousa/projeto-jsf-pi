@@ -3,7 +3,6 @@ package bean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import javax.faces.bean.ManagedBean;
@@ -14,6 +13,7 @@ import dao.ImcDAO;
 import dao.PacienteDAO;
 import entidade.IMC;
 import entidade.Paciente;
+import enuns.ResultadoIMC;
 import exception.JSFException;
 import util.Util;
 
@@ -22,15 +22,10 @@ import util.Util;
 public class ImcBean
 {
    private IMC imc;
-
    private String nomePacientePesquisa;
-
    private List<Paciente> pacientesCadastrados;
-
    private List<IMC> imcs;
-
    private List<IMC> listaResultado;
-
    private boolean exibirResultadosPesquisa;
 
    @ManagedProperty(value = "#{navegacaoBean}")
@@ -124,53 +119,42 @@ public class ImcBean
    
    private void calcularImc()
    {
-      double peso = this.imc.getPesoPaciente();
-      double altura = this.imc.getAlturaPaciente();
-
-      double resultadoImc = peso / Math.pow(altura, 2);
-      String resultadoImcFormatado = String.format(Locale.US, "%.2f", resultadoImc);
-
-      String classificacao;
-      if (resultadoImc >= 40)
+      double resultadoCalculoImc = this.imc.getPesoPaciente() / Math.pow(this.imc.getAlturaPaciente(), 2);
+      ResultadoIMC resultado = classificarImc(resultadoCalculoImc);
+      
+      this.imc.setResultadoImc(resultado);
+   }
+   
+   private ResultadoIMC classificarImc(double imc)
+   {
+      if (imc >= 40)
       {
-         classificacao = "OBESIDADE GRAU 3";
+         return ResultadoIMC.OBESIDADE_GRAU_3;
       }
-      else if (resultadoImc >= 35)
+      else if (imc >= 35)
       {
-         classificacao = "OBESIDADE GRAU 2";
+         return ResultadoIMC.OBESIDADE_GRAU_2;
       }
-      else if (resultadoImc >= 30)
+      else if (imc >= 30)
       {
-         classificacao = "OBESIDADE GRAU 1";
+         return ResultadoIMC.OBESIDADE_GRAU_1;
       }
-      else if (resultadoImc >= 25)
+      else if (imc >= 25)
       {
-         classificacao = "ACIMA DO PESO";
+         return ResultadoIMC.ACIMA_DO_PESO;
       }
-      else if (resultadoImc >= 18.5)
+      else if (imc >= 18.5)
       {
-         classificacao = "PESO NORMAL";
+         return ResultadoIMC.PESO_NORMAL;
       }
-      else if (resultadoImc >= 17)
+      else if (imc >= 17)
       {
-         classificacao = "ABAIXO DO PESO";
+         return ResultadoIMC.ABAIXO_DO_PESO;
       }
       else
       {
-         classificacao = "MUITO ABAIXO DO PESO";
+         return ResultadoIMC.MUITO_ABAIXO_DO_PESO;
       }
-      try
-      {
-         double resultadoImcDouble = Double.parseDouble(resultadoImcFormatado.replace(",", "."));
-         this.imc.setResultadoImc(resultadoImcDouble);
-      }
-      catch (NumberFormatException e)
-      {
-         System.err.println("Erro ao converter o resultado do IMC para Double: " + e.getMessage());
-         this.imc.setResultadoImc(0.0);
-      }
-
-      this.imc.setClassificacao(classificacao);
    }
    
    public void deletar(Integer id)

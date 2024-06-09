@@ -83,15 +83,7 @@
 				    </p:column>
 				    
 				    <p:column headerText="Resultado IMC" style="text-align: center; cursor: pointer;">
-				        <h:outputText value="#{item.resultadoImc}" title="#{item.resultadoImc}"/>
-				    </p:column>
-				    
-				    <p:column headerText="Classificação" style="text-align: center; cursor: pointer;">
-				        <h:outputText value="#{item.classificacao}" title="#{item.classificacao}"/>
-				    </p:column>
-				    
-				    <p:column headerText="Sexo" style="text-align: center; cursor: pointer;">
-				        <h:outputText value="#{item.paciente.sexo}" title="#{item.paciente.sexo}"/>
+				        <h:outputText value="#{fn:replace(item.resultadoImc, '_', ' ')}" title="#{item.resultadoImc}"/>
 				    </p:column>
 				    
 				    <p:column headerText="Data Inclusao" style="text-align: center; cursor: pointer;">
