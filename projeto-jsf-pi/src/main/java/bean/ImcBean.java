@@ -120,41 +120,9 @@ public class ImcBean
    private void calcularImc()
    {
       double resultadoCalculoImc = this.imc.getPesoPaciente() / Math.pow(this.imc.getAlturaPaciente(), 2);
-      ResultadoIMC resultado = classificarImc(resultadoCalculoImc);
       
-      this.imc.setResultadoImc(resultado);
-   }
-   
-   private ResultadoIMC classificarImc(double imc)
-   {
-      if (imc >= 40)
-      {
-         return ResultadoIMC.OBESIDADE_GRAU_3;
-      }
-      else if (imc >= 35)
-      {
-         return ResultadoIMC.OBESIDADE_GRAU_2;
-      }
-      else if (imc >= 30)
-      {
-         return ResultadoIMC.OBESIDADE_GRAU_1;
-      }
-      else if (imc >= 25)
-      {
-         return ResultadoIMC.ACIMA_DO_PESO;
-      }
-      else if (imc >= 18.5)
-      {
-         return ResultadoIMC.PESO_NORMAL;
-      }
-      else if (imc >= 17)
-      {
-         return ResultadoIMC.ABAIXO_DO_PESO;
-      }
-      else
-      {
-         return ResultadoIMC.MUITO_ABAIXO_DO_PESO;
-      }
+      ResultadoIMC classificacao = ResultadoIMC.calcularIMC(resultadoCalculoImc);
+      this.imc.setResultadoImc(classificacao);
    }
    
    public void deletar(Integer id)
