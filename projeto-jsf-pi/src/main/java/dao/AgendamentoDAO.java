@@ -64,6 +64,37 @@ public class AgendamentoDAO
          }
       }
    }
+   
+   public static List<Agendamento> pesquisarAgendamentosAgendados(String cpf)
+   {
+      EntityManager entityManager = JPAUtilService.fabricarEntityManager();
+
+      try
+      {
+         Query query = entityManager.createQuery(
+               "SELECT agd FROM Agendamento agd " +
+               "INNER JOIN Paciente pac ON pac.id = agd.codigoPaciente " +
+               "WHERE agd.status = :status AND pac.cpf = :cpf"
+           );
+           query.setParameter("status", StatusAgendamento.AGENDADO);
+           query.setParameter("cpf", cpf);
+         
+         List<Agendamento> resultado = query.getResultList();
+         return resultado;
+      
+      }
+      catch (Exception e)
+      {
+         throw new JSFException("Erro ao pesquisar agendamento: " + e.getMessage());
+      }
+      finally
+      {
+         if (entityManager != null)
+         {
+            entityManager.close();
+         }
+      }
+   }
 
    public static void inserir(Agendamento agendamento)
    {

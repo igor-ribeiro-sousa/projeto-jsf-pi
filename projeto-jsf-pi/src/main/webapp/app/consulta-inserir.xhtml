@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+
+	<title>Consulta - Inserir</title>
+	<style>
+	html, body {
+		height: 100%;
+		margin: 0;
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	body {
+		background-image: linear-gradient(to left bottom, #181818, #19191d, #191a23, #171b28,
+			#141d2e);
+	}
+	
+	.card-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
+	
+	.card {
+		width: 45rem;
+	}
+	
+	.form-container label {
+		display: block;
+		font-weight: bold;
+	}
+	</style>
+</h:head>
+
+<h:body>
+	<div class="card-container">
+		<p:card styleClass="card">
+			<f:facet name="title">
+					Consulta - Inserir
+			</f:facet>
+
+			<div class="form-container">
+				<h:form id="formulario">
+				
+					<p:messages id="messages" showDetail="true" closable="true">
+						<p:autoUpdate />
+					</p:messages>
+
+					<div class="ui-g">
+					    <div class="ui-g-12">
+					        <p:outputLabel for="paciente" value="Paciente:" />
+					        <p:selectOneMenu id="paciente" style="width: 42rem;" value="#{consultaBean.consulta.paciente.cpf}">
+					        	<f:selectItem itemValue="" itemLabel="-- Selecione um paciente --" />
+					            <f:selectItems value="#{consultaBean.pacientesCadastrados}" var="paciente"
+					                itemValue="#{paciente.cpf}"
+					                itemLabel="Paciente: #{paciente.nome} - CPF: 	#{paciente.cpf}" />
+					         <p:ajax update="agendamento" listener="#{consultaBean.atualizarAgendamentos}" />
+					        </p:selectOneMenu>
+					    </div>
+					  </div>
+					  
+					  <div class="ui-g">
+					    <div class="ui-g-12">
+					        <p:outputLabel for="agendamento" value="Agendamento" />
+					        <p:selectOneMenu id="agendamento" style="width: 42rem;" value="#{consultaBean.consulta.agendamento.id}">
+			                    <f:selectItem itemValue="" itemLabel="-- Selecione um agendamento --" />
+					            <f:selectItems value="#{consultaBean.agendamentos}" var="agendamento"
+					                itemValue="#{agendamento.id}"
+					                itemLabel="Agendamento: #{agendamento.id} - 
+					                		   Médico: 	#{agendamento.medico.nome} -
+					                		   CRM:	#{agendamento.medico.crm}" />
+					        </p:selectOneMenu>
+					    </div>
+					  </div>
+					  
+					<div class="ui-g">
+					    <div class="ui-g-12">
+					        <p:outputLabel for="queixaPrincipal" value="Queixa principal:" />
+					        <div class="ui-input-icon-right">
+					            <i class="pi pi-exclamation-triangle" />
+					            <p:inputTextarea id="queixaPrincipal" style="width: 42rem; height: 10rem; resize: none;"
+					                value="#{consultaBean.consulta.queixaPrincipal}"
+					                placeholder="Digite seu problema." autoResize="false"/>
+					        </div>
+					    </div>
+					</div>
+
+					<div class="ui-g-12">
+						<div style="display: flex; justify-content: flex-end; gap: 10px;">
+							<p:commandButton value="Voltar"
+								actionListener="#{consultaBean.navegarParaPesquisar}"
+								styleClass="ui-button-secondary" update="contentPanel" />
+
+							<p:commandButton value="Inserir" icon="pi pi-check"
+								action="#{consultaBean.inserir}" update="contentPanel"
+								styleClass="ui-button-success" />
+						</div>
+					</div>
+
+				</h:form>
+			</div>
+		</p:card>
+	</div>
+</h:body>
+</html>

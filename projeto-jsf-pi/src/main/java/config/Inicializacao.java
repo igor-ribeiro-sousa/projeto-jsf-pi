@@ -121,7 +121,7 @@ public class Inicializacao implements ServletContextListener
                   medico1.getId(), 
                   StatusAgendamento.AGENDADO, 
                   Clinica.HOSPITAL_OTOCLINICA, 
-                  new SimpleDateFormat("dd/MM/yyyy HH:mm").parse("20/05/2024 15:00"), 
+                  new SimpleDateFormat("dd/MM/yyyy HH:mm").parse("20/07/2024 15:00"), 
                   new Date()));
             
             AgendamentoDAO.inserir(setAgendamento(
@@ -130,7 +130,7 @@ public class Inicializacao implements ServletContextListener
                   medico3.getId(), 
                   StatusAgendamento.AGENDADO, 
                   Clinica.HOSPITAL_OTOCLINICA, 
-                  new SimpleDateFormat("dd/MM/yyyy HH:mm").parse("22/05/2024 10:00"), 
+                  new SimpleDateFormat("dd/MM/yyyy HH:mm").parse("22/07/2024 10:00"), 
                   new Date()));
             
             AgendamentoDAO.inserir(setAgendamento(

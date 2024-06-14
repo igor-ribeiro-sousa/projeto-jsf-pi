@@ -57,6 +57,9 @@ public class Paciente
    
    @OneToMany(mappedBy = "paciente", cascade = CascadeType.REMOVE)
    private List<Agendamento> agendamentos = new ArrayList<Agendamento>();
+   
+   @OneToMany(mappedBy = "paciente", cascade = CascadeType.REMOVE)
+   private List<Consulta> consultas = new ArrayList<Consulta>();
 
    public Integer getId()
    {
@@ -156,5 +159,15 @@ public class Paciente
    public void setAgendamentos(List<Agendamento> agendamentos)
    {
       this.agendamentos = agendamentos;
+   }
+
+   public List<Consulta> getConsultas()
+   {
+      return consultas;
+   }
+
+   public void setConsultas(List<Consulta> consultas)
+   {
+      this.consultas = consultas;
    }
 }
